@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:h2:file:./data/urbanrisk;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+app:
+  demo: ${DEMO_ENABLED:true}
+  ingest-token: ${INGEST_TOKEN:local-demo-only}
+  cors-origins: ${CORS_ORIGINS:http://localhost:8081,http://127.0.0.1:8081,http://localhost:19006}
