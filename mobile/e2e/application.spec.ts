@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { spawn, ChildProcess } from 'node:child_process';
-import { mkdirSync, createWriteStream } from 'node:fs';
+import { mkdirSync, mkdtempSync, createWriteStream } from 'node:fs';
 import { resolve } from 'node:path';
 
 let backend:ChildProcess;
 const evidence=resolve('../docs/images');
 const java=process.env.TEST_JAVA || 'java';
 const jar=resolve('../backend/target/urban-risk-1.0.0.jar');
+let databaseUrl:string;
 async function startBackend() {
-  backend=spawn(java,['-jar',jar],{cwd:resolve('..'),env:{...process.env,PORT:'8082',DB_URL:'jdbc:h2:file:./data/e2e;DB_CLOSE_ON_EXIT=FALSE',DEMO_ENABLED:'true'},windowsHide:true,stdio:['ignore','pipe','pipe']});
+  backend=spawn(java,['-jar',jar],{cwd:resolve('..'),env:{...process.env,PORT:'8082',DB_URL:databaseUrl,DEMO_ENABLED:'true'},windowsHide:true,stdio:['ignore','pipe','pipe']});
   const log=createWriteStream(resolve('../data/e2e-backend.log'),{flags:'a'});
   backend.stdout?.pipe(log);backend.stderr?.pipe(log);
   await expect.poll(async()=>{try{return (await fetch('http://localhost:8082/actuator/health')).status;}catch{return 0;}},{timeout:30000}).toBe(200);
@@ -17,7 +18,12 @@ async function stopBackend() {
   if(!backend || backend.exitCode!==null) return;
   await new Promise<void>(resolve=>{backend.once('exit',()=>resolve());backend.kill();});
 }
-test.beforeAll(async()=>{mkdirSync(evidence,{recursive:true});mkdirSync(resolve('../data'),{recursive:true});await startBackend();});
+test.beforeAll(async()=>{
+  mkdirSync(evidence,{recursive:true});mkdirSync(resolve('../data'),{recursive:true});
+  const directory=mkdtempSync(resolve('../data/e2e-'));
+  databaseUrl=`jdbc:h2:file:${directory.replaceAll('\\','/')}/monitoring;DB_CLOSE_ON_EXIT=FALSE`;
+  await startBackend();
+});
 test.afterAll(async()=>{await stopBackend();});
 
 test('API real, filtros, detalhes, cache após queda e reconexão',async({page})=>{

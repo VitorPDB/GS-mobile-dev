@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-16",
+  "backend": {
+    "command": "mvn verify",
+    "status": "BUILD SUCCESS",
+    "tests": 4,
+    "failures": 0
+  },
+  "typescript": "passed",
+  "sync_tests": {
+    "tests": 6,
+    "failures": 0
+  },
+  "e2e": {
+    "tests": 2,
+    "failures": 0,
+    "seconds": 35.6,
+    "real_backend_restart": true,
+    "reading_id_survives_restart": true,
+    "automatic_web_server": true
+  },
+  "web_export": "passed",
+  "android_hermes_export": "passed",
+  "npm_audit_vulnerabilities": 0,
+  "not_executed": [
+    "Android device/emulator",
+    "Docker/PostgreSQL",
+    "GitHub Actions remote",
+    "load testing",
+    "user research"
+  ]
+}
