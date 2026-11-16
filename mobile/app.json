@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Vigia Urbana",
+    "slug": "vigia-urbana",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "br.edu.urbanrisk.vigia",
+      "usesCleartextTraffic": true
+    },
+    "web": {
+      "bundler": "metro",
+      "name": "Vigia Urbana"
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
+  }
+}
