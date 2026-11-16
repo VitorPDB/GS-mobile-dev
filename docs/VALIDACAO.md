@@ -1,4 +1,4 @@
-# Validação da versão candidata
+# Validação da versão aprovada
 
 Data: 16/11/2026. Ambiente local: Windows, JDK Temurin 21.0.13, Maven 3.9.11, Node 24.16.0. Revisões automatizadas por agentes independentes não substituem avaliação do professor nem teste em dispositivos reais.
 
