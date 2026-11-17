@@ -16,3 +16,6 @@ API REST, persistência, origem e confiança, painel, lista de eventos, avisos e
 Prioridade compreensível; dados antigos visíveis como antigos; falha de rede recuperável; simulação sempre explícita.
 ## Accessibility & Inclusion
 Português, texto acompanhando as cores de severidade, alvos de toque de 48 dp e suporte ao tamanho de fonte do sistema.
+
+## Brand Commitments
+Nome: Urban Risk Intelligence Platform / URIP. Feed inspirado no Instagram, paleta branco/creme e preto. Página de conexão removida a pedido do usuário; configuração técnica por ambiente.

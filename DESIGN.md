@@ -1,7 +1,9 @@
-# Direção de interface
-Modo: Operate. Painel de serviço público para leitura rápida, em ambiente claro; suporte ao tema escuro do sistema.
-Nome de interface: Vigia Urbana. Marca editorial tipográfica, sem imagens decorativas.
-Superfícies claras, texto azul escuro, ação verde petróleo. Severidade crítica vermelha, alta âmbar escuro, moderada azul. Cor nunca comunica sozinha.
-Cabeçalho com conexão e última sincronização; visão geral por risco; lista priorizada com detalhes expansíveis; navegação para painel, atividade e conexão. Navegação inferior em largura compacta, barra lateral em desktop.
-Corpo na fonte nativa, títulos na escala Material; botões de 48 dp, foco de teclado nativo no web. Linhas com separadores, espaçamento generoso, sem efeitos decorativos. Sem animações necessárias.
-Dados, limites e bairros são demonstrativos e assim identificados. Métricas de latência vêm de medições reais.
+# URIP — direção de interface
+Modo: Operate. Direção explicitamente solicitada: feed inspirado no Instagram, branco/creme e preto com tonalidades para distinguir a arquitetura.
+Marca: Urban Risk Intelligence Platform, abreviada como urip na assinatura tipográfica.
+Coluna de leitura com largura máxima de 600 dp; navegação lateral em telas expandidas; duas abas superiores no celular. Filtros circulares de risco lembram a navegação de stories. Cada publicação é uma ocorrência real da API, com bairro, medida, fonte, confiança, orientação e análise expansível. Nenhuma interação social fictícia.
+Panorama e contexto ficam na lateral em desktop amplo. Nas telas menores, o Panorama fica expansível no início do feed; contexto e privacidade ficam ao final. A página Conexão foi removida; serviço configurado por EXPO_PUBLIC_API_URL, reconexão automática preservada.
+Paleta fixa clara: papel #FFFFFF, creme #F7F5F0, pedra #EFEBE3, tom mais profundo #E6E1D7 e tinta #171715. Texto secundário #65625B. Severidade em preto/grafite/tom de pedra, sempre acompanhada de nome textual. A solicitação de cores claras prevalece sobre o antigo tema escuro automático.
+Hierarquia por tipografia, alinhamento, linhas finas e espaços; sem gradientes, sombras ou cartões arredondados de dashboard. Números grandes são a medida da publicação, não métricas decorativas.
+Referência de layout: feed do Instagram; conteúdo e identidade próprios. Alvos interativos de pelo menos 48 dp, escala de fonte do sistema, safe areas e rótulos acessíveis.
+Dados, limites e bairros permanecem simulados e explicitamente identificados.

@@ -1,0 +1,21 @@
+{
+  "version": "1.1.0",
+  "typescript": "passed",
+  "unit_tests": {
+    "passed": 6
+  },
+  "e2e": {
+    "passed": 2,
+    "seconds": 30.4,
+    "preview_port": 8091,
+    "real_api_port": 8082,
+    "panorama_compact": true,
+    "keyboard_enter": true,
+    "legacy_url_ignored": true,
+    "persistent_reading_after_restart": true
+  },
+  "web_export": "passed",
+  "android_hermes_export": "passed",
+  "backend_source_files_unchanged": 15,
+  "native_device_tested": false
+}

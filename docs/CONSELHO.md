@@ -12,7 +12,7 @@ O desenvolvimento ocorre numa cópia candidata. Os pareceres não são certifica
 | Mobile e experiência | 4,4 | 4,6 | Aprovado após correção |
 | Qualidade e operação | 4,4 | 4,7 | Aprovado após correções e E2E |
 
-## Correções exigidas
+## Correções exigidas na versão inicial
 
 - Análise: mostrar base + incremento = pontuação; corrigir arredondamento da janela de 30 minutos e testar seus limites.
 - Backend: transação atômica por rodada do simulador; repetição do pacote após liberar o JAR em uso no Windows.
@@ -21,3 +21,19 @@ O desenvolvimento ocorre numa cópia candidata. Os pareceres não são certifica
 - Produto: finalizar instruções de validação e registro do conselho.
 
 Pareceres integrais incluídos em `reviews/`. Todos os cinco membros atingiram o mínimo: **incorporação aprovada**. Versão promovida para `main` somente após o último parecer. A falha temporária de empacotamento citada nos pareceres técnicos foi resolvida e Maven verify terminou com BUILD SUCCESS; veja `VALIDACAO.md`. Limitações nativas e de infraestrutura permanecem declaradas no relatório de validação.
+
+## Redesign v1.1 — incorporação aprovada
+
+Pedido: branco/creme/preto, feed inspirado no Instagram, marca Urban Risk Intelligence Platform / URIP, remoção da página Conexão. Candidato desenvolvido isoladamente em relação à versão em execução.
+
+| Membro | Rodada 1 | Rodada 2 | Estado |
+|---|---:|---:|---|
+| Produto e requisitos | 4,7 | — | Aprovado |
+| Backend e dados | 4,7 | — | Aprovado; backend intacto |
+| Análise e privacidade | 4,7 | — | Aprovado |
+| Mobile e experiência | 4,3 | 4,6 | Aprovado após correção do Panorama compacto |
+| Qualidade e operação | 4,7 | — | Aprovado após testes |
+
+O membro Mobile exigiu Panorama abaixo de 1200 px; corrigido com seção expansível no início do feed. O E2E revelou glifo no nome acessível de Entendi; corrigido com rótulos explícitos e wrapper de ícone oculto da árvore de acessibilidade. Passagem final Mobile: **ship**, restrita à correção e às regressões examinadas.
+
+Todos os cinco atingiram ≥4,5. A versão v1.1 foi incorporada somente depois da última aprovação. Pareceres completos: `reviews/redesign-*.md`. A validação cobre web e exportação Hermes; não certifica execução nativa Android.

@@ -1,4 +1,6 @@
-# Validação da versão aprovada
+# Validação
+
+**Versão atual v1.1:** veja [REDESIGN.md](REDESIGN.md) para os testes e capturas do novo feed. O registro abaixo documenta a versão inicial e suas limitações.
 
 Data: 16/11/2026. Ambiente local: Windows, JDK Temurin 21.0.13, Maven 3.9.11, Node 24.16.0. Revisões automatizadas por agentes independentes não substituem avaliação do professor nem teste em dispositivos reais.
 

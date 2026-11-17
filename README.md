@@ -1,4 +1,4 @@
-# Vigia Urbana
+# Urban Risk Intelligence Platform — URIP
 
 Urban Risk Intelligence Platform acadêmica. Java/Spring Boot + React Native/Expo no mesmo repositório. Monitora **alagamentos, calor extremo e falta de energia** em três bairros fictícios. Sensores, bases públicas e relatos comunitários são **simulados**, inclusive quando enviados pela API. Não há integração com fontes oficiais.
 
@@ -28,9 +28,9 @@ Alternativa com JDK/Maven já instalados: `cd backend` e `mvn spring-boot:run`; 
 
 ## Android
 
-Instale a versão do Expo Go compatível com o SDK 58 em https://expo.dev/go (selecione Android e SDK 58). Na pasta `mobile`, execute `npm start` e escaneie o QR code pelo Expo Go. Celular e computador devem estar na mesma rede. Em **Conexão**, informe `http://IP-DO-COMPUTADOR:8080`; use `ipconfig` no Windows para consultar o IPv4. Permita a porta 8080 no firewall apenas na rede privada usada para a apresentação. Redes de universidade podem bloquear comunicação entre aparelhos.
+Instale a versão do Expo Go compatível com o SDK 58 em https://expo.dev/go (selecione Android e SDK 58). Na pasta `mobile`, execute `npm start` e escaneie o QR code pelo Expo Go. Celular e computador devem estar na mesma rede. Antes de iniciar o Expo, defina `$env:EXPO_PUBLIC_API_URL='http://IP-DO-COMPUTADOR:8080'`; use `ipconfig` no Windows para consultar o IPv4. Permita a porta 8080 no firewall apenas na rede privada usada para a apresentação. Redes de universidade podem bloquear comunicação entre aparelhos.
 
-No Android Emulator, o endereço padrão é `http://10.0.2.2:8080`. Com um emulador já aberto e o Android SDK configurado, use `npm run android`. O app usa componentes React Native reais, safe areas, tema claro/escuro e tamanho de fonte do sistema. A versão web serve à demonstração no Windows; não é um executável nativo de Windows.
+No Android Emulator, o endereço padrão é `http://10.0.2.2:8080`. Com um emulador já aberto e o Android SDK configurado, use `npm run android`. O app usa componentes React Native reais, safe areas, paleta clara branco/creme e preto e tamanho de fonte do sistema. A versão web serve à demonstração no Windows; não é um executável nativo de Windows.
 
 HTTP é permitido para desenvolvimento local no Android. Antes de publicar fora da rede local, use HTTPS e gere uma build apropriada. Não há APK assinado incluído. `npx expo export --platform android` verifica o bundle JavaScript, mas não substitui instalação e teste em aparelho.
 
@@ -38,7 +38,7 @@ HTTP é permitido para desenvolvimento local no Android. Antes de publicar fora 
 
 Com Docker Desktop instalado, na raiz execute `docker compose up --build`. Ele inicia PostgreSQL com volume persistente e backend em 8080. O app continua sendo iniciado separadamente. Para a demonstração, pare apenas o backend com `docker compose stop backend` e recupere com `docker compose start backend`. `docker compose down` preserva o volume; não use `-v` se quiser preservar os dados.
 
-Copie `.env.example` para `.env` se precisar alterar parâmetros. Os valores padrão são exclusivos de desenvolvimento. No modo sem Docker, variáveis podem ser definidas no PowerShell antes de iniciar o backend, por exemplo `$env:DEMO_ENABLED='false'`. Com o modo demo desligado é obrigatório definir `INGEST_TOKEN` diferente do padrão. Fontes continuam marcadas como simuladas, pois esta versão é um protótipo.
+Copie `.env.example` para `.env` se precisar alterar parâmetros do backend. O app usa `mobile/.env` a partir de `mobile/.env.example` para o endereço da API, sem página de conexão. Variáveis EXPO_PUBLIC são incorporadas no bundle: reinicie o Expo ou exporte novamente após alterá-las. Endereços salvos pela antiga página de conexão são ignorados. Os valores padrão são exclusivos de desenvolvimento. No modo sem Docker, variáveis podem ser definidas no PowerShell antes de iniciar o backend, por exemplo `$env:DEMO_ENABLED='false'`. Com o modo demo desligado é obrigatório definir `INGEST_TOKEN` diferente do padrão. Fontes continuam marcadas como simuladas, pois esta versão é um protótipo.
 
 ## Demonstração sugerida
 
@@ -117,7 +117,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-O Playwright inicia o preview web automaticamente em 8081 e uma API própria em 8082, usando uma pasta `data/e2e-*` nova por execução como banco (preservada no reinício interno). **Não precisa iniciar o backend em 8080.** Reserve as portas 8081/8082 e não use um backend manual na porta 8082. O teste desliga e reinicia apenas a API que ele mesmo criou. Se um preview em 8081 já estiver ativo, será reutilizado localmente; pare-o se estiver servindo uma versão antiga. A API de teste é encerrada ao terminar.
+O Playwright inicia o preview web automaticamente em 8091 e uma API própria em 8082, usando uma pasta `data/e2e-*` nova por execução como banco (preservada no reinício interno). **Não precisa iniciar o backend em 8080.** Reserve as portas 8091/8082 e não use um backend manual na porta 8082. O teste desliga e reinicia apenas a API que ele mesmo criou. A porta 8091 deve estar livre. O teste redireciona apenas o host das chamadas HTTP do app para a API real em 8082. Nenhuma resposta JSON é simulada pelo Playwright. A API de teste é encerrada ao terminar.
 
 Se o Java 21 não estiver no PATH, defina `$env:TEST_JAVA='C:\caminho\jdk-21\bin\java.exe'`. O instalador portátil cria esse executável dentro de `.tools/jdk/`. Opcionalmente, para usar um Chromium já instalado em vez do download do Playwright, defina `$env:PLAYWRIGHT_CHROMIUM_EXECUTABLE='C:\caminho\navegador.exe'`.
 

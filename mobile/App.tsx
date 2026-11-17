@@ -1,82 +1,110 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, useColorScheme, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
 import { useMonitoring } from './src/useMonitoring';
-import { dark, light, Theme } from './src/theme';
+import { theme as t } from './src/theme';
 import { RiskType, labels } from './src/types';
 import { AlertRow } from './src/AlertRow';
+import { Icon } from './src/Icon';
+import { FeedFilters, Filter } from './src/FeedFilters';
 
-type Tab='Painel'|'Atividade'|'Conexão';
-function Button({label,onPress,theme:t,disabled=false}:{label:string;onPress:()=>void;theme:Theme;disabled?:boolean}) {
-  return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[s.button,{backgroundColor:t.primary,opacity:disabled ? 0.55 : pressed ? 0.8 : 1}]}><Text style={{color:t.onPrimary,fontWeight:'700',fontSize:15}}>{label}</Text></Pressable>;
-}
+type Tab='Feed'|'Atividade';
 function Screen() {
-  const t=useColorScheme()==='dark'?dark:light;
-  const wide=useWindowDimensions().width>=900;
-  const [tab,setTab]=useState<Tab>('Painel');
-  const [filter,setFilter]=useState<RiskType|'ALL'>('ALL');
-  const [draft,setDraft]=useState('');
-  const [error,setError]=useState('');
+  const width=useWindowDimensions().width;
+  const wide=width>=900;
+  const showAside=width>=1200;
+  const [tab,setTab]=useState<Tab>('Feed');
+  const [filter,setFilter]=useState<Filter>('ALL');
   const [now,setNow]=useState(Date.now());
+  const [about,setAbout]=useState(false);
+  const [overview,setOverview]=useState(false);
   const m=useMonitoring();
-  useEffect(()=>{setDraft(m.url);},[m.url]);
   useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),5000);return()=>clearInterval(timer);},[]);
   const data=m.snapshot?.data;
   const alerts=data?.alerts.filter(a=>filter==='ALL'||a.type===filter)||[];
-  const online=m.status==='online';
-  const navigation=<View style={[wide?s.rail:s.nav,{backgroundColor:t.surface,borderColor:t.line}]}>
-    {wide&&<View style={s.railBrand}><MaterialCommunityIcons accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" name="radar" color={t.primary} size={32}/><Text style={[s.brand,{color:t.text}]}>Vigia Urbana</Text><Text style={[s.body,{color:t.muted}]}>Seu bairro, acompanhado.</Text></View>}
-    {(['Painel','Atividade','Conexão'] as Tab[]).map(item=><Pressable key={item} accessibilityLabel={item} accessibilityRole="tab" accessibilityState={{selected:tab===item}} onPress={()=>setTab(item)} style={[s.navItem,wide&&s.railItem,tab===item&&{backgroundColor:t.subtle}]}>
-      <MaterialCommunityIcons accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" name={item==='Painel'?'view-dashboard-outline':item==='Atividade'?'history':'lan-connect'} size={23} color={tab===item?t.primary:t.muted}/><Text style={{color:tab===item?t.primary:t.muted,fontSize:13,fontWeight:'600'}}>{item}</Text>
+  const lastSync=m.snapshot?new Date(m.snapshot.savedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'aguardando';
+  const status=<View style={s.status}><View style={[s.statusDot,m.status==='offline'&&s.offlineDot]}/><Text accessibilityLiveRegion="polite" style={s.small}>{m.status==='online'?'Conectado':m.status==='loading'?'Conectando':'Sem conexão'}</Text></View>;
+  const refresh=<Pressable accessibilityRole="button" accessibilityLabel="Atualizar" accessibilityState={{disabled:m.busy}} disabled={m.busy}
+    onPress={()=>void m.refresh()} style={({pressed})=>[s.refresh,pressed&&{backgroundColor:t.stone},m.busy&&{opacity:.5}]}><Icon name="refresh" size={23}/></Pressable>;
+  const tabs=(rail:boolean)=><View accessibilityRole="tablist" style={rail?s.railTabs:s.mobileTabs}>
+    {(['Feed','Atividade'] as Tab[]).map(item=><Pressable key={item} accessibilityRole="tab" accessibilityLabel={item}
+      accessibilityState={{selected:tab===item}} onPress={()=>setTab(item)}
+      style={({pressed})=>[rail?s.railTab:s.mobileTab,!rail&&tab===item&&s.selectedTab,pressed&&{backgroundColor:t.canvas}]}>
+      <Icon name={item==='Feed'?(tab===item?'home':'home-outline'):'history'} size={24}/>
+      <Text style={[s.tabText,tab===item&&{fontWeight:'700',color:t.ink}]}>{item}</Text>
     </Pressable>)}
-    {wide&&<Text style={[s.railFoot,{color:t.muted}]}>Projeto acadêmico{ '\n' }Dados de demonstração</Text>}
   </View>;
-  return <SafeAreaView style={[s.safe,{backgroundColor:t.bg}]}><StatusBar style={t===dark?'light':'dark'}/><View style={[s.shell,wide&&{flexDirection:'row'}]}>
-    {wide&&navigation}
+  const panorama=<View style={s.panorama}><Text accessibilityRole="header" style={s.asideTitle}>Panorama</Text><Text style={s.asideBody}>Níveis altos ou críticos, por risco.</Text>
+              {(['FLOOD','HEAT','OUTAGE'] as RiskType[]).map(type=>{const items=data?.alerts.filter(a=>a.type===type)||[];return <View key={type} style={s.panoramaRow}><Text style={s.panoramaLabel}>{labels[type]}</Text><Text style={s.panoramaValue}>{data?`${items.filter(a=>a.score>=60).length} / ${items.length}`:'—'}</Text></View>;})}
+              <Text style={s.footnote}>Com base nas últimas leituras salvas.{ '\n' }Leituras com mais de 90 s são sinalizadas.</Text>
+            </View>;
+  const provenance=<View style={s.provenance}>
+    <Text style={s.asideTitle}>Informação com contexto.</Text>
+    <Text style={s.asideBody}>Leituras de sensores, bases públicas e comunidade — todas simuladas nesta demonstração.</Text>
+    <Pressable accessibilityRole="button" accessibilityLabel="Sobre a análise" accessibilityState={{expanded:about}} onPress={()=>setAbout(!about)} style={s.aboutButton}><Text style={s.link}>Sobre a análise</Text><Icon name={about?'chevron-up':'arrow-top-right'} size={17}/></Pressable>
+    {about&&<Text style={s.asideBody}>A prioridade considera intensidade e tendência. A confiança é atribuída à categoria da fonte e não representa probabilidade de ocorrência. Abra uma publicação para ver a conta completa. Os avisos aparecem com o app aberto.</Text>}
+    <Text style={s.footnote}>Nenhum dado pessoal ou localização do aparelho é coletado.</Text>
+    <Text style={s.footnote}>Sincronizado às {lastSync}{m.latency!==null?` · ${m.latency} ms`:''}{'\n'}Urban Risk Intelligence Platform</Text>
+  </View>;
+
+  return <SafeAreaView style={s.safe}><StatusBar style="dark"/><View style={s.shell}>
+    {wide&&<View style={s.rail}>
+      <View style={s.brandBlock}><Text style={s.brand}>urip</Text><Text style={s.fullName}>Urban Risk{ '\n' }Intelligence Platform</Text></View>
+      {tabs(true)}
+      <View style={s.railFooter}><Text style={s.footnote}>Monitoramento urbano{ '\n' }Projeto acadêmico</Text></View>
+    </View>}
     <View style={s.workspace}>
-      <View style={[s.top,{backgroundColor:t.surface,borderColor:t.line}]}>
-        <View><Text style={[wide?s.topLabel:s.brand,{color:t.text}]}>{wide?'Monitoramento urbano':'Vigia Urbana'}</Text><Text style={[s.small,{color:t.muted}]}>Alagamento, calor e energia</Text></View>
-        <View style={s.connection}><View style={[s.dot,{backgroundColor:online?t.primary:m.status==='loading'?t.moderate:t.high}]}/><Text accessibilityLiveRegion="polite" style={[s.small,{color:t.text}]}>{online?'Conectado':m.status==='loading'?'Conectando':'Sem conexão'}</Text></View>
+      <View style={s.topbar}>
+        {wide?<View style={s.topIdentity}><Text style={s.topTitle}>{tab==='Feed'?'Ocorrências':'Atividade'}</Text><Text style={s.topDescription}>Urban Risk Intelligence Platform</Text></View>:<View style={s.topIdentity}><Text style={s.mobileBrand}>urip</Text><Text style={s.mobileFullName}>Urban Risk Intelligence Platform</Text></View>}
+        <View style={s.topActions}>{wide&&status}{refresh}</View>
       </View>
-      <ScrollView contentContainerStyle={[s.content,wide&&s.contentWide]} keyboardShouldPersistTaps="handled">
-        <View style={s.heading}><View style={{flex:1}}><Text accessibilityRole="header" style={[s.h1,{color:t.text}]}>{tab==='Painel'?'O que acontece no bairro':tab==='Atividade'?'Últimas leituras':'Sua conexão'}</Text><Text style={[s.body,{color:t.muted,marginTop:8}]}>{tab==='Painel'?'Acompanhe os riscos e entenda cada alerta.':tab==='Atividade'?'Dados recebidos, com horário e origem.':'Configure o servidor e acompanhe a sincronização.'}</Text></View></View>
-        <View style={[s.demo,{backgroundColor:t.subtle}]}><MaterialCommunityIcons accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" name="flask-outline" size={21} color={t.primary}/><Text style={[s.small,{color:t.text,flex:1}]}>Modo demonstração · bairros, leituras e limites simulados. Não são alertas oficiais.</Text></View>
-        {m.status==='offline'&&<View accessibilityRole="alert" style={[s.message,{backgroundColor:t.highBg}]}><Text style={[s.detailTitle,{color:t.high}]}>Servidor indisponível</Text><Text style={[s.body,{color:t.text}]}>{data?'Você está vendo os últimos dados salvos. Os alertas podem ter mudado.':'Ainda não há dados salvos deste servidor. Confira o endereço em Conexão e inicie o backend.'} Nova tentativa automática a cada 5 segundos.</Text><Button label="Tentar agora" onPress={()=>void m.refresh()} theme={t} disabled={m.busy}/></View>}
-        {!!m.storageWarning&&<Text accessibilityRole="alert" style={[s.body,{color:t.high}]}>{m.storageWarning}</Text>}
-        {!!m.notice&&<View accessibilityRole="alert" accessibilityLiveRegion="assertive" style={[s.message,{backgroundColor:t.highBg}]}><Text style={[s.body,{color:t.text}]}>{m.notice}</Text><Button label="Entendi" onPress={m.dismissNotice} theme={t}/></View>}
-        {tab==='Painel'&&<>
-          <View style={[s.overview,{backgroundColor:t.surface,borderColor:t.line}]}>
-            <Text style={[s.h2,{color:t.text}]}>Visão geral</Text>
-            <View style={s.riskSummary}>{(['FLOOD','HEAT','OUTAGE'] as RiskType[]).map(type=>{
-              const items=data?.alerts.filter(a=>a.type===type)||[]; const critical=items.filter(a=>a.score>=60).length;
-              return <View key={type} style={s.summaryItem}><Text style={[s.body,{color:t.muted}]}>{labels[type]}</Text><Text style={[s.summaryValue,{color:t.text}]}>{data?`${critical} de ${items.length}`:'—'}</Text><Text style={[s.small,{color:t.muted}]}>em nível alto ou crítico</Text></View>;
-            })}</View>
+      {!wide&&tabs(false)}
+      <ScrollView contentContainerStyle={[s.scrollContent,wide&&s.scrollWide]}>
+        <View style={[s.columns,showAside&&{gap:64}]}>
+          <View style={s.feed}>
+            <View style={s.feedIntro}><Text accessibilityRole="header" style={s.heading}>{tab==='Feed'?'Seu radar urbano.':'Cada leitura conta.'}</Text><View style={s.introMeta}><Text style={s.introText}>{tab==='Feed'?(data?`${data.alerts.length} ocorrências · por prioridade`:'Aguardando as primeiras leituras'):'Histórico com horário e origem.'}</Text>{!wide&&status}</View></View>
+            <View style={s.simulation}><Icon name="flask-outline" size={17}/><Text style={s.simulationText}>Dados simulados. Não são alertas oficiais.</Text></View>
+            {!showAside&&<View style={s.compactOverview}><Pressable accessibilityRole="button" accessibilityLabel="Panorama" accessibilityState={{expanded:overview}} onPress={()=>setOverview(!overview)} style={s.overviewToggle}><Text style={s.sectionLabel}>Panorama</Text><Text style={s.overviewCount}>{data?`${data.alerts.filter(a=>a.score>=60).length} em atenção`:'Aguardando dados'}</Text><Icon name={overview?'chevron-up':'chevron-down'} size={20}/></Pressable>{overview&&panorama}</View>}
+            {m.status==='offline'&&<View accessibilityRole="alert" style={s.notice}>
+              <Text style={s.noticeTitle}>Atualizações pausadas</Text><Text style={s.body}>{data?'Você está vendo os últimos dados salvos. A situação pode ter mudado.':'Ainda não há dados salvos. As ocorrências aparecerão quando o serviço estiver disponível.'} Tentaremos novamente a cada 5 segundos.</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="Tentar agora" disabled={m.busy} accessibilityState={{disabled:m.busy}} onPress={()=>void m.refresh()} style={s.noticeAction}><Text style={s.link}>Tentar agora</Text><Icon name="arrow-right" size={18}/></Pressable>
+            </View>}
+            {!!m.storageWarning&&<Text accessibilityRole="alert" style={s.warning}>{m.storageWarning}</Text>}
+            {!!m.notice&&<View accessibilityRole="alert" accessibilityLiveRegion="assertive" style={s.notice}><Text style={s.body}>{m.notice}</Text><Pressable accessibilityRole="button" accessibilityLabel="Entendi" onPress={m.dismissNotice} style={s.noticeAction}><Text style={s.link}>Entendi</Text><Icon name="check" size={18}/></Pressable></View>}
+            {tab==='Feed'?<>
+              <FeedFilters selected={filter} onSelect={setFilter}/>
+              <View style={s.feedDivider}><Text style={s.sectionLabel}>Acompanhe de perto</Text><Text style={s.footnote}>{filter==='ALL'?'Todos os riscos':labels[filter]}</Text></View>
+              {m.status==='loading'&&!data?<View style={s.empty}><ActivityIndicator color={t.ink}/><Text style={s.body}>Buscando as últimas leituras…</Text></View>:!alerts.length?<View style={s.empty}><Icon name="inbox-outline" size={30}/><Text style={s.body}>{data?'Nenhuma ocorrência para este filtro.':'Seu feed será preenchido quando os dados chegarem.'}</Text></View>:alerts.map(a=><AlertRow key={a.id} alert={a} serverTime={data!.serverTime} savedAt={m.snapshot!.savedAt} now={now}/>)}
+            </>:<View style={s.history}>
+              <Text accessibilityRole="header" style={s.sectionLabel}>Histórico recebido</Text><Text style={s.historyInfo}>Até 30 leituras recentes · {data?.storedReadings??0} registros no servidor</Text>
+              {!data?.readings.length&&<Text style={s.body}>Nenhuma leitura disponível.</Text>}
+              {data?.readings.map(r=><View key={r.id} style={s.historyRow}><View style={s.historyIdentity}><Text style={s.historyTitle}>{r.district}</Text><Text style={s.historyMeta}>{labels[r.type]} · {r.source==='SENSOR'?'Sensor simulado':r.source==='PUBLIC_DATA'?'Base pública simulada':'Comunidade simulada'}</Text><Text style={s.footnote}>{new Date(r.observedAt).toLocaleString('pt-BR')}</Text></View><Text style={s.historyValue}>{r.value.toLocaleString('pt-BR',{maximumFractionDigits:1})}<Text style={s.historyUnit}> {r.type==='HEAT'?'°C':r.type==='FLOOD'?'mm/h':'min'}</Text></Text></View>)}
+            </View>}
+            {!showAside&&<View style={s.mobileProvenance}>{provenance}</View>}
           </View>
-          <View style={[s.list,{backgroundColor:t.surface}]}>
-            <View style={s.listHeading}><Text accessibilityRole="header" style={[s.h2,{color:t.text}]}>Alertas por prioridade</Text><Text style={[s.small,{color:t.muted}]}>{data?`${data.alerts.length} locais e riscos`:'Aguardando dados'}</Text></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filters}>{(['ALL','FLOOD','HEAT','OUTAGE'] as const).map(item=><Pressable key={item} accessibilityRole="button" accessibilityState={{selected:filter===item}} onPress={()=>setFilter(item)} style={[s.chip,{backgroundColor:filter===item?t.primary:t.bg}]}><Text style={{color:filter===item?t.onPrimary:t.muted,fontSize:14,fontWeight:'600'}}>{item==='ALL'?'Todos':labels[item]}</Text></Pressable>)}</ScrollView>
-            {m.status==='loading'&&!data?<View style={s.empty}><ActivityIndicator color={t.primary}/><Text style={[s.body,{color:t.muted}]}>Buscando dados do servidor…</Text></View>:!alerts.length?<View style={s.empty}><Text style={[s.body,{color:t.muted}]}>{data?'Nenhuma ocorrência para este filtro.':'Os alertas aparecerão aqui quando a API estiver disponível.'}</Text></View>:alerts.map(a=><AlertRow key={a.id} alert={a} theme={t} serverTime={data!.serverTime} savedAt={m.snapshot!.savedAt} now={now}/>)}
-          </View>
-        </>}
-        {tab==='Atividade'&&<View style={[s.list,{backgroundColor:t.surface}]}><Text style={[s.h2,{color:t.text}]}>Histórico recebido</Text><Text style={[s.body,{color:t.muted,marginVertical:12}]}>Até 30 leituras recentes. {data?.storedReadings??0} registros persistidos no servidor.</Text>
-          {!data?.readings.length&&<Text style={[s.body,{color:t.muted}]}>Nenhuma leitura disponível.</Text>}
-          {data?.readings.map(r=><View key={r.id} style={[s.historyRow,{borderColor:t.line}]}><View style={{flex:1}}><Text style={[s.detailTitle,{color:t.text}]}>{labels[r.type]} · {r.district}</Text><Text style={[s.small,{color:t.muted}]}>{r.source==='SENSOR'?'Sensor simulado':r.source==='PUBLIC_DATA'?'Base pública simulada':'Comunidade simulada'} · {new Date(r.observedAt).toLocaleString('pt-BR')}</Text></View><Text style={[s.body,{color:t.text}]}>{r.value.toLocaleString('pt-BR',{maximumFractionDigits:1})} {r.type==='HEAT'?'°C':r.type==='FLOOD'?'mm/h':'min'}</Text></View>)}
-        </View>}
-        {tab==='Conexão'&&<View style={[s.list,{backgroundColor:t.surface,gap:16}]}>
-          <Text style={[s.h2,{color:t.text}]}>Endereço da API</Text><Text style={[s.body,{color:t.muted}]}>No celular Android, use o IP do computador na mesma rede Wi-Fi. No emulador Android, use http://10.0.2.2:8080. No navegador deste computador, use http://localhost:8080.</Text>
-          <Text accessibilityRole="text" style={[s.detailTitle,{color:t.text}]}>Servidor (HTTP ou HTTPS)</Text><TextInput accessibilityLabel="Endereço da API" value={draft} onChangeText={setDraft} autoCapitalize="none" autoCorrect={false} keyboardType="url" placeholder="http://192.168.0.10:8080" placeholderTextColor={t.muted} style={[s.input,{borderColor:t.line,color:t.text,backgroundColor:t.bg}]}/>
-          {!!error&&<Text accessibilityRole="alert" style={[s.body,{color:t.critical}]}>{error}</Text>}
-          <Button label="Salvar e conectar" theme={t} onPress={()=>{setError('');void m.changeUrl(draft).catch(()=>setError('Endereço inválido. Use http://IP:8080, sem caminhos ou parâmetros.'));}}/>
-          <Text style={[s.body,{color:t.muted}]}>Consulta automática: 5 s · tempo limite: 5 s{ '\n' }Última resposta: {m.latency===null?'—':`${m.latency} ms`}{ '\n' }As notificações aparecem dentro do app, enquanto ele está aberto. Não há push em segundo plano.</Text>
-          <Text style={[s.body,{color:t.muted}]}>Não coletamos nome, localização do aparelho ou identificadores pessoais. O endereço do servidor e os últimos dados ficam armazenados neste dispositivo.</Text>
-        </View>}
-        <View style={s.footer}><Text style={[s.small,{color:t.muted}]}>Última sincronização: {m.snapshot?new Date(m.snapshot.savedAt).toLocaleString('pt-BR'):'nenhuma'}{ '\n' }Abra um alerta para consultar a origem e a análise.</Text><Pressable accessibilityRole="button" accessibilityLabel="Atualizar" disabled={m.busy} onPress={()=>void m.refresh()} style={s.refresh}><MaterialCommunityIcons accessible={false} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" name="refresh" size={20} color={t.primary}/><Text style={{color:t.primary,fontWeight:'600'}}>{m.busy?'Atualizando…':'Atualizar'}</Text></Pressable></View>
+          {showAside&&<View style={s.aside}>
+            {panorama}
+            {provenance}
+          </View>}
+        </View>
       </ScrollView>
-      {!wide&&navigation}
     </View>
   </View></SafeAreaView>;
 }
 export default function App(){return <SafeAreaProvider><Screen/></SafeAreaProvider>;}
-const s=StyleSheet.create({safe:{flex:1},shell:{flex:1},workspace:{flex:1,minWidth:0},top:{minHeight:84,paddingHorizontal:24,paddingVertical:16,borderBottomWidth:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between',gap:12},topLabel:{fontSize:16,fontWeight:'600'},brand:{fontSize:22,fontWeight:'700',letterSpacing:-.4},connection:{flexDirection:'row',alignItems:'center',gap:7},dot:{width:8,height:8,borderRadius:4},small:{fontSize:12,lineHeight:19},body:{fontSize:15,lineHeight:24},content:{padding:20,gap:20,paddingBottom:36},contentWide:{padding:40,maxWidth:1200,width:'100%',alignSelf:'center'},heading:{flexDirection:'row',gap:16},h1:{fontSize:30,lineHeight:38,fontWeight:'700',letterSpacing:-.7},h2:{fontSize:20,fontWeight:'600',lineHeight:28},detailTitle:{fontSize:15,fontWeight:'600',lineHeight:23},demo:{flexDirection:'row',alignItems:'center',gap:10,padding:14,borderRadius:12},overview:{padding:22,borderRadius:14,borderWidth:1,gap:20},riskSummary:{flexDirection:'row',flexWrap:'wrap',gap:24},summaryItem:{minWidth:130,flex:1,gap:5},summaryValue:{fontSize:25,fontWeight:'600'},list:{paddingHorizontal:20,paddingVertical:22,borderRadius:14},listHeading:{flexDirection:'row',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap'},filters:{gap:8,paddingVertical:16},chip:{minHeight:48,paddingHorizontal:18,justifyContent:'center',borderRadius:24},empty:{paddingVertical:36,alignItems:'center',gap:12},nav:{flexDirection:'row',borderTopWidth:1,padding:8,gap:8},navItem:{flex:1,minHeight:56,alignItems:'center',justifyContent:'center',gap:4,borderRadius:14},rail:{width:236,borderRightWidth:1,padding:20,gap:12},railBrand:{gap:12,paddingVertical:22,marginBottom:22},railItem:{flex:0,flexDirection:'row',justifyContent:'flex-start',paddingHorizontal:18,gap:14},railFoot:{marginTop:'auto',fontSize:12,lineHeight:21,paddingVertical:14},message:{padding:18,gap:12,borderRadius:12},button:{minHeight:48,paddingHorizontal:18,paddingVertical:12,alignItems:'center',justifyContent:'center',borderRadius:10,alignSelf:'flex-start'},footer:{flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between',gap:16},refresh:{minHeight:48,flexDirection:'row',alignItems:'center',gap:8,paddingHorizontal:8},historyRow:{flexDirection:'row',alignItems:'center',gap:12,borderBottomWidth:1,paddingVertical:18},input:{minHeight:52,borderWidth:1,borderRadius:10,padding:14,fontSize:16}});
+
+const s=StyleSheet.create({
+  safe:{flex:1,backgroundColor:t.paper},shell:{flex:1,flexDirection:'row'},workspace:{flex:1,minWidth:0},
+  rail:{width:224,borderRightWidth:1,borderColor:t.line,paddingHorizontal:24,paddingTop:40,backgroundColor:t.paper},brandBlock:{gap:12,marginBottom:54},brand:{fontSize:46,lineHeight:54,fontWeight:'800',letterSpacing:-1.7,color:t.ink},fullName:{fontSize:13,lineHeight:20,color:t.secondary},
+  railTabs:{gap:12},railTab:{minHeight:54,flexDirection:'row',alignItems:'center',gap:16,paddingHorizontal:10,borderRadius:6},tabText:{fontSize:15,color:t.secondary},railFooter:{marginTop:'auto',gap:20,paddingVertical:28},
+  topbar:{minHeight:88,paddingHorizontal:32,paddingVertical:14,borderBottomWidth:1,borderColor:t.line,backgroundColor:t.paper,flexDirection:'row',alignItems:'center',justifyContent:'space-between',gap:12},topIdentity:{flex:1,minWidth:0,gap:4},topTitle:{fontSize:17,fontWeight:'600',color:t.ink},topDescription:{fontSize:12,color:t.secondary},mobileBrand:{fontSize:32,lineHeight:36,fontWeight:'800',letterSpacing:-1.1,color:t.ink},mobileFullName:{fontSize:11,lineHeight:16,color:t.secondary},topActions:{flexDirection:'row',alignItems:'center',gap:20},refresh:{minWidth:48,minHeight:48,justifyContent:'center',alignItems:'center',borderRadius:24},
+  status:{flexDirection:'row',alignItems:'center',gap:7},statusDot:{width:6,height:6,borderRadius:3,backgroundColor:t.ink},offlineDot:{backgroundColor:t.paper,borderWidth:1,borderColor:t.ink,width:7,height:7,borderRadius:4},small:{fontSize:11,color:t.secondary,lineHeight:18},
+  mobileTabs:{flexDirection:'row',borderBottomWidth:1,borderColor:t.line},mobileTab:{flex:1,minHeight:52,flexDirection:'row',justifyContent:'center',alignItems:'center',gap:9,borderBottomWidth:2,borderColor:'transparent'},selectedTab:{borderColor:t.ink},
+  scrollContent:{paddingHorizontal:20,paddingTop:28,paddingBottom:40},scrollWide:{paddingHorizontal:48,paddingTop:42},columns:{flexDirection:'row',justifyContent:'center',alignItems:'flex-start',width:'100%',maxWidth:1000,alignSelf:'center'},feed:{flex:1,maxWidth:600,minWidth:0},feedIntro:{gap:12,marginBottom:20},heading:{fontSize:28,lineHeight:36,fontWeight:'600',letterSpacing:-.7,color:t.ink},introMeta:{flexDirection:'row',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8},introText:{fontSize:12,lineHeight:19,color:t.secondary},simulation:{flexDirection:'row',alignItems:'center',gap:8,paddingVertical:12,paddingHorizontal:12,backgroundColor:t.canvas},simulationText:{fontSize:11,lineHeight:18,color:t.secondary,flex:1},
+  feedDivider:{borderTopWidth:1,borderBottomWidth:1,borderColor:t.line,paddingVertical:16,flexDirection:'row',justifyContent:'space-between',alignItems:'center',gap:10,flexWrap:'wrap'},sectionLabel:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.ink},footnote:{fontSize:11,lineHeight:18,color:t.secondary},
+  notice:{backgroundColor:t.stone,padding:18,marginTop:16,gap:10},noticeTitle:{fontSize:15,fontWeight:'700',color:t.ink},body:{fontSize:14,lineHeight:23,color:t.ink},noticeAction:{minHeight:48,flexDirection:'row',alignItems:'center',alignSelf:'flex-start',gap:10},link:{fontSize:13,lineHeight:20,color:t.ink,fontWeight:'600'},warning:{fontSize:13,lineHeight:20,color:t.ink,paddingVertical:16},empty:{paddingVertical:56,alignItems:'center',gap:18},
+  aside:{width:246,gap:36},panorama:{gap:12,paddingBottom:24,borderBottomWidth:1,borderColor:t.line},asideTitle:{fontSize:15,fontWeight:'600',lineHeight:23,color:t.ink},asideBody:{fontSize:13,lineHeight:22,color:t.secondary},panoramaRow:{flexDirection:'row',justifyContent:'space-between',alignItems:'center',gap:12,minHeight:40},panoramaLabel:{fontSize:13,color:t.ink},panoramaValue:{fontSize:13,color:t.secondary},provenance:{gap:14},aboutButton:{minHeight:48,flexDirection:'row',alignItems:'center',alignSelf:'flex-start',gap:8},mobileProvenance:{borderTopWidth:1,borderColor:t.line,paddingTop:28,marginTop:8},
+  compactOverview:{marginTop:12,gap:8},overviewToggle:{minHeight:48,flexDirection:'row',alignItems:'center',gap:12,paddingVertical:8},overviewCount:{flex:1,textAlign:'right',fontSize:12,lineHeight:19,color:t.secondary},
+  history:{paddingTop:28},historyInfo:{fontSize:12,lineHeight:20,color:t.secondary,marginTop:8,marginBottom:12},historyRow:{flexDirection:'row',alignItems:'center',gap:16,borderBottomWidth:1,borderColor:t.line,paddingVertical:22},historyIdentity:{flex:1,minWidth:0,gap:6},historyTitle:{fontSize:15,fontWeight:'600',color:t.ink},historyMeta:{fontSize:12,lineHeight:19,color:t.secondary},historyValue:{fontSize:22,color:t.ink},historyUnit:{fontSize:12,color:t.secondary},
+});

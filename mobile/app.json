@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "Vigia Urbana",
+    "name": "Urban Risk Intelligence Platform",
     "slug": "vigia-urbana",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "default",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "android": {
       "package": "br.edu.urbanrisk.vigia",
       "usesCleartextTraffic": true
     },
     "web": {
       "bundler": "metro",
-      "name": "Vigia Urbana"
+      "name": "URIP"
     },
     "plugins": [
       "expo-status-bar"
