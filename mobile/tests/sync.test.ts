@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { changedCritical, fetchDashboard, isStale, parseSnapshot, validateUrl, validDashboard } from '../src/sync';
 import type { Dashboard, RiskAlert } from '../src/types';
-const alert:RiskAlert={id:'HEAT:Centro',readingId:1,type:'HEAT',title:'Calor extremo',district:'Centro',value:41,unit:'°C',source:'SENSOR',sourceLabel:'Sensor simulado',confidence:.9,score:90,severity:'Crítico',trend:'Estável',explanation:'Temperatura',recommendation:'Sombra',observedAt:'2026-11-16T12:00:00Z',stale:false,simulated:true};
+const alert:RiskAlert={id:'HEAT:Centro',readingId:1,type:'HEAT',title:'Calor extremo',district:'Centro',value:41,unit:'°C',source:'SENSOR',sourceLabel:'Sensor simulado',confidence:.9,baseConfidence:.9,likes:0,dislikes:0,myVote:'NONE',confidenceExplanation:'Fonte e votos das últimas 24 h',score:90,severity:'Crítico',trend:'Estável',explanation:'Temperatura',recommendation:'Sombra',observedAt:'2026-11-16T12:00:00Z',stale:false,simulated:true};
 const data:Dashboard={serverTime:alert.observedAt,simulated:true,alerts:[alert],readings:[],storedReadings:1};
 test('cache inválido é ignorado, cache íntegro é restaurado',()=>{
   assert.equal(parseSnapshot('{broken'),null); assert.equal(parseSnapshot('{"data":{}}'),null);
@@ -16,7 +16,7 @@ test('leituras e alertas corrompidos são rejeitados antes da renderização',as
     assert.equal(validDashboard(bad),false);
     assert.equal(parseSnapshot(JSON.stringify({data:bad,savedAt:data.serverTime})),null);
   }
-  for(const invalid of [null,{...alert,unit:null},{...alert,confidence:2},{...alert,score:-1},{...alert,stale:null}])
+  for(const invalid of [null,{...alert,unit:null},{...alert,confidence:2},{...alert,score:-1},{...alert,stale:null},{...alert,likes:-1},{...alert,dislikes:null},{...alert,myVote:'UP'},{...alert,baseConfidence:2}])
     assert.equal(validDashboard({...data,alerts:[invalid]}),false);
   const original=globalThis.fetch;
   try {

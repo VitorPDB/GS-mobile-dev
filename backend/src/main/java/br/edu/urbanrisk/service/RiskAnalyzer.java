@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class RiskAnalyzer {
     public record Alert(String id, long readingId, RiskType type, String title, String district, double value,
-        String unit, SourceType source, String sourceLabel, double confidence, int score, String severity,
+        String unit, SourceType source, String sourceLabel, double confidence, double baseConfidence,
+        long likes,long dislikes,Vote myVote,String confidenceExplanation,int score, String severity,
         String trend, String explanation, String recommendation, Instant observedAt, boolean stale, boolean simulated) {}
 
     public Alert analyze(Reading r, Reading previous, Instant now) {
+        return analyze(r,previous,now,ReactionService.Feedback.empty());
+    }
+    public Alert analyze(Reading r, Reading previous, Instant now,ReactionService.Feedback feedback) {
         double[] limits = switch(r.type) {
             case FLOOD -> new double[]{10,30,50};
             case HEAT -> new double[]{30,35,40};
@@ -40,6 +44,8 @@ public class RiskAnalyzer {
             case OUTAGE -> "Mantenha distância de fios caídos e consulte a distribuidora local.";
         };
         return new Alert(r.type.name()+":"+r.district,r.id,r.type,r.type.label,r.district,r.value,r.type.unit,
-            r.source,r.source.label,r.source.confidence,score,severity,trend,explanation,recommendation,r.observedAt,stale,true);
+            r.source,r.source.label,feedback.confidence(r.source.confidence),r.source.confidence,
+            feedback.likes(),feedback.dislikes(),feedback.myVote(),feedback.explanation(r.source.confidence),
+            score,severity,trend,explanation,recommendation,r.observedAt,stale,true);
     }
 }

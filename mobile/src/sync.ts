@@ -1,4 +1,4 @@
-import type { Dashboard, Snapshot, RiskAlert, Reading } from './types';
+import type { Dashboard, Snapshot, RiskAlert, Reading, Vote } from './types';
 
 export function validateUrl(raw: string): string {
   const url = new URL(raw.trim());
@@ -20,6 +20,9 @@ function validAlert(a:unknown):a is RiskAlert {
   return record(a) && text(a.id) && Number.isSafeInteger(a.readingId) && (a.readingId as number)>0
     && type(a.type) && source(a.source) && text(a.title) && text(a.district) && finite(a.value) && a.value>=0
     && text(a.unit) && text(a.sourceLabel) && finite(a.confidence) && a.confidence>=0 && a.confidence<=1
+    && finite(a.baseConfidence) && a.baseConfidence>=0 && a.baseConfidence<=1
+    && Number.isSafeInteger(a.likes) && (a.likes as number)>=0 && Number.isSafeInteger(a.dislikes) && (a.dislikes as number)>=0
+    && typeof a.myVote==='string' && ['LIKE','DISLIKE','NONE'].includes(a.myVote) && text(a.confidenceExplanation)
     && Number.isSafeInteger(a.score) && (a.score as number)>=0 && (a.score as number)<=100
     && typeof a.severity==='string' && ['Crítico','Alto','Moderado','Baixo'].includes(a.severity)
     && text(a.trend) && text(a.explanation) && text(a.recommendation) && timestamp(a.observedAt)
@@ -34,19 +37,32 @@ export function parseSnapshot(raw: string | null): Snapshot | null {
   try { const v = JSON.parse(raw || 'null'); return v && validDashboard(v.data) && Number.isFinite(Date.parse(v.savedAt)) ? v : null; }
   catch { return null; }
 }
-export async function fetchDashboard(base: string, signal?: AbortSignal): Promise<Dashboard> {
+export async function fetchDashboard(base: string, signal?: AbortSignal,clientId?:string|null): Promise<Dashboard> {
   const controller = new AbortController();
   const abort = () => controller.abort();
   if(signal?.aborted) controller.abort();
   signal?.addEventListener('abort',abort);
   const timeout = setTimeout(abort,5000);
   try {
-    const response = await fetch(`${validateUrl(base)}/api/dashboard`,{signal:controller.signal});
+    const response = await fetch(`${validateUrl(base)}/api/dashboard`,{signal:controller.signal,headers:clientId?{'X-Client-Id':clientId}:{}});
     if(!response.ok) throw new Error(`API retornou HTTP ${response.status}`);
     const result:unknown = await response.json();
     if(!validDashboard(result)) throw new Error('Resposta inválida da API');
     return result;
   } finally { clearTimeout(timeout); signal?.removeEventListener('abort',abort); }
+}
+export async function sendReaction(base:string,readingId:number,clientId:string,vote:Vote):Promise<void> {
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),5000);
+  try {
+    const response=await fetch(`${validateUrl(base)}/api/readings/${readingId}/reaction`,{
+      method:'PUT',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({clientId,vote}),
+    });
+    if(!response.ok)throw new Error(`Não foi possível confirmar seu voto (HTTP ${response.status}). Atualize e tente novamente.`);
+  } catch(error) {
+    if(error instanceof Error&&error.message.startsWith('Não foi possível'))throw error;
+    throw new Error('Não foi possível confirmar seu voto. Confira a conexão e tente novamente.');
+  } finally {clearTimeout(timeout);}
 }
 export function changedCritical(previous: Dashboard | null, next: Dashboard): RiskAlert[] {
   if(!previous) return [];

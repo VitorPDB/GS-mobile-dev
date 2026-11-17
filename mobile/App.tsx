@@ -25,7 +25,7 @@ function Screen() {
   const alerts=data?.alerts.filter(a=>filter==='ALL'||a.type===filter)||[];
   const lastSync=m.snapshot?new Date(m.snapshot.savedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'aguardando';
   const status=<View style={s.status}><View style={[s.statusDot,m.status==='offline'&&s.offlineDot]}/><Text accessibilityLiveRegion="polite" style={s.small}>{m.status==='online'?'Conectado':m.status==='loading'?'Conectando':'Sem conexão'}</Text></View>;
-  const refresh=<Pressable accessibilityRole="button" accessibilityLabel="Atualizar" accessibilityState={{disabled:m.busy}} disabled={m.busy}
+  const refresh=<Pressable accessibilityRole="button" accessibilityLabel="Atualizar" accessibilityState={{disabled:m.busy||m.votingId!==null}} disabled={m.busy||m.votingId!==null}
     onPress={()=>void m.refresh()} style={({pressed})=>[s.refresh,pressed&&{backgroundColor:t.stone},m.busy&&{opacity:.5}]}><Icon name="refresh" size={23}/></Pressable>;
   const tabs=(rail:boolean)=><View accessibilityRole="tablist" style={rail?s.railTabs:s.mobileTabs}>
     {(['Feed','Atividade'] as Tab[]).map(item=><Pressable key={item} accessibilityRole="tab" accessibilityLabel={item}
@@ -43,20 +43,20 @@ function Screen() {
     <Text style={s.asideTitle}>Informação com contexto.</Text>
     <Text style={s.asideBody}>Leituras de sensores, bases públicas e comunidade — todas simuladas nesta demonstração.</Text>
     <Pressable accessibilityRole="button" accessibilityLabel="Sobre a análise" accessibilityState={{expanded:about}} onPress={()=>setAbout(!about)} style={s.aboutButton}><Text style={s.link}>Sobre a análise</Text><Icon name={about?'chevron-up':'arrow-top-right'} size={17}/></Pressable>
-    {about&&<Text style={s.asideBody}>A prioridade considera intensidade e tendência. A confiança é atribuída à categoria da fonte e não representa probabilidade de ocorrência. Abra uma publicação para ver a conta completa. Os avisos aparecem com o app aberto.</Text>}
-    <Text style={s.footnote}>Nenhum dado pessoal ou localização do aparelho é coletado.</Text>
+    {about&&<Text style={s.asideBody}>A prioridade considera intensidade e tendência. A confiança combina a base da fonte com likes e dislikes das últimas 24 horas. Não representa probabilidade de ocorrência. Abra uma publicação para ver a conta completa. Os avisos aparecem com o app aberto.</Text>}
+    <Text style={s.footnote}>Sem nome ou localização do aparelho. Um identificador aleatório fica salvo neste dispositivo para registrar seus votos.</Text>
     <Text style={s.footnote}>Sincronizado às {lastSync}{m.latency!==null?` · ${m.latency} ms`:''}{'\n'}Urban Risk Intelligence Platform</Text>
   </View>;
 
   return <SafeAreaView style={s.safe}><StatusBar style="dark"/><View style={s.shell}>
     {wide&&<View style={s.rail}>
-      <View style={s.brandBlock}><Text style={s.brand}>urip</Text><Text style={s.fullName}>Urban Risk{ '\n' }Intelligence Platform</Text></View>
+      <View style={s.brandBlock}><Text style={s.brand}>URIP</Text><Text style={s.fullName}>Urban Risk{ '\n' }Intelligence Platform</Text></View>
       {tabs(true)}
       <View style={s.railFooter}><Text style={s.footnote}>Monitoramento urbano{ '\n' }Projeto acadêmico</Text></View>
     </View>}
     <View style={s.workspace}>
       <View style={s.topbar}>
-        {wide?<View style={s.topIdentity}><Text style={s.topTitle}>{tab==='Feed'?'Ocorrências':'Atividade'}</Text><Text style={s.topDescription}>Urban Risk Intelligence Platform</Text></View>:<View style={s.topIdentity}><Text style={s.mobileBrand}>urip</Text><Text style={s.mobileFullName}>Urban Risk Intelligence Platform</Text></View>}
+        {wide?<View style={s.topIdentity}><Text style={s.topTitle}>{tab==='Feed'?'Ocorrências':'Atividade'}</Text><Text style={s.topDescription}>Urban Risk Intelligence Platform</Text></View>:<View style={s.topIdentity}><Text style={s.mobileBrand}>URIP</Text><Text style={s.mobileFullName}>Urban Risk Intelligence Platform</Text></View>}
         <View style={s.topActions}>{wide&&status}{refresh}</View>
       </View>
       {!wide&&tabs(false)}
@@ -67,15 +67,15 @@ function Screen() {
             <View style={s.simulation}><Icon name="flask-outline" size={17}/><Text style={s.simulationText}>Dados simulados. Não são alertas oficiais.</Text></View>
             {!showAside&&<View style={s.compactOverview}><Pressable accessibilityRole="button" accessibilityLabel="Panorama" accessibilityState={{expanded:overview}} onPress={()=>setOverview(!overview)} style={s.overviewToggle}><Text style={s.sectionLabel}>Panorama</Text><Text style={s.overviewCount}>{data?`${data.alerts.filter(a=>a.score>=60).length} em atenção`:'Aguardando dados'}</Text><Icon name={overview?'chevron-up':'chevron-down'} size={20}/></Pressable>{overview&&panorama}</View>}
             {m.status==='offline'&&<View accessibilityRole="alert" style={s.notice}>
-              <Text style={s.noticeTitle}>Atualizações pausadas</Text><Text style={s.body}>{data?'Você está vendo os últimos dados salvos. A situação pode ter mudado.':'Ainda não há dados salvos. As ocorrências aparecerão quando o serviço estiver disponível.'} Tentaremos novamente a cada 5 segundos.</Text>
-              <Pressable accessibilityRole="button" accessibilityLabel="Tentar agora" disabled={m.busy} accessibilityState={{disabled:m.busy}} onPress={()=>void m.refresh()} style={s.noticeAction}><Text style={s.link}>Tentar agora</Text><Icon name="arrow-right" size={18}/></Pressable>
+              <Text style={s.noticeTitle}>Atualizações pausadas</Text><Text style={s.body}>{data?'Você está vendo os últimos dados salvos. A situação pode ter mudado.':'Ainda não há dados salvos. As ocorrências aparecerão quando o serviço estiver disponível.'} Tentaremos novamente a cada 5 segundos. Conecte-se para votar.</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="Tentar agora" disabled={m.busy||m.votingId!==null} accessibilityState={{disabled:m.busy||m.votingId!==null}} onPress={()=>void m.refresh()} style={s.noticeAction}><Text style={s.link}>Tentar agora</Text><Icon name="arrow-right" size={18}/></Pressable>
             </View>}
             {!!m.storageWarning&&<Text accessibilityRole="alert" style={s.warning}>{m.storageWarning}</Text>}
             {!!m.notice&&<View accessibilityRole="alert" accessibilityLiveRegion="assertive" style={s.notice}><Text style={s.body}>{m.notice}</Text><Pressable accessibilityRole="button" accessibilityLabel="Entendi" onPress={m.dismissNotice} style={s.noticeAction}><Text style={s.link}>Entendi</Text><Icon name="check" size={18}/></Pressable></View>}
             {tab==='Feed'?<>
               <FeedFilters selected={filter} onSelect={setFilter}/>
               <View style={s.feedDivider}><Text style={s.sectionLabel}>Acompanhe de perto</Text><Text style={s.footnote}>{filter==='ALL'?'Todos os riscos':labels[filter]}</Text></View>
-              {m.status==='loading'&&!data?<View style={s.empty}><ActivityIndicator color={t.ink}/><Text style={s.body}>Buscando as últimas leituras…</Text></View>:!alerts.length?<View style={s.empty}><Icon name="inbox-outline" size={30}/><Text style={s.body}>{data?'Nenhuma ocorrência para este filtro.':'Seu feed será preenchido quando os dados chegarem.'}</Text></View>:alerts.map(a=><AlertRow key={a.id} alert={a} serverTime={data!.serverTime} savedAt={m.snapshot!.savedAt} now={now}/>)}
+              {m.status==='loading'&&!data?<View style={s.empty}><ActivityIndicator color={t.ink}/><Text style={s.body}>Buscando as últimas leituras…</Text></View>:!alerts.length?<View style={s.empty}><Icon name="inbox-outline" size={30}/><Text style={s.body}>{data?'Nenhuma ocorrência para este filtro.':'Seu feed será preenchido quando os dados chegarem.'}</Text></View>:alerts.map(a=><AlertRow key={a.id} alert={a} serverTime={data!.serverTime} savedAt={m.snapshot!.savedAt} now={now} onReact={m.reactTo} voteDisabled={!m.canVote||m.votingId!==null} voting={m.votingId===a.id}/>)}
             </>:<View style={s.history}>
               <Text accessibilityRole="header" style={s.sectionLabel}>Histórico recebido</Text><Text style={s.historyInfo}>Até 30 leituras recentes · {data?.storedReadings??0} registros no servidor</Text>
               {!data?.readings.length&&<Text style={s.body}>Nenhuma leitura disponível.</Text>}

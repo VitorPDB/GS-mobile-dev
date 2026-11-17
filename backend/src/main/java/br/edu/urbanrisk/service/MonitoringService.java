@@ -12,19 +12,25 @@ public class MonitoringService {
     private final ReadingRepository repository;
     private final RiskAnalyzer analyzer;
     private final Clock clock;
-    public MonitoringService(ReadingRepository repository,RiskAnalyzer analyzer,Clock clock) {
-        this.repository=repository; this.analyzer=analyzer; this.clock=clock;
+    private final ReactionService reactions;
+    public MonitoringService(ReadingRepository repository,RiskAnalyzer analyzer,Clock clock,ReactionService reactions) {
+        this.repository=repository; this.analyzer=analyzer; this.clock=clock; this.reactions=reactions;
     }
     public record Dashboard(Instant serverTime, boolean simulated, List<RiskAnalyzer.Alert> alerts, List<Reading> readings, long storedReadings) {}
     @Transactional(readOnly=true)
     public Dashboard dashboard() {
+        return dashboard(null);
+    }
+    @Transactional(readOnly=true)
+    public Dashboard dashboard(UUID clientId) {
         List<Reading> rows = repository.findTop1000ByOrderByObservedAtDescIdDesc();
         Map<String,List<Reading>> groups = new LinkedHashMap<>();
         rows.forEach(r -> groups.computeIfAbsent(r.type+":"+r.district,k->new ArrayList<>()).add(r));
+        Map<String,ReactionService.Feedback> feedback=reactions.summaries(groups.keySet(),clientId);
         List<RiskAnalyzer.Alert> alerts = groups.values().stream().map(g -> {
             Reading latest=g.getFirst();
             Reading previous=g.stream().skip(1).filter(r->r.source==latest.source && r.observedAt.isBefore(latest.observedAt)).findFirst().orElse(null);
-            return analyzer.analyze(latest,previous,clock.instant());
+            return analyzer.analyze(latest,previous,clock.instant(),feedback.getOrDefault(ReactionService.key(latest),ReactionService.Feedback.empty()));
         }).sorted(Comparator.comparingInt(RiskAnalyzer.Alert::score).reversed().thenComparing(RiskAnalyzer.Alert::id)).toList();
         return new Dashboard(clock.instant(),true,alerts,rows.stream().limit(30).toList(),repository.count());
     }

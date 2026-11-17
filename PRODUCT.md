@@ -18,4 +18,7 @@ Prioridade compreensível; dados antigos visíveis como antigos; falha de rede r
 Português, texto acompanhando as cores de severidade, alvos de toque de 48 dp e suporte ao tamanho de fonte do sistema.
 
 ## Brand Commitments
-Nome: Urban Risk Intelligence Platform / URIP. Feed inspirado no Instagram, paleta branco/creme e preto. Página de conexão removida a pedido do usuário; configuração técnica por ambiente.
+Nome: Urban Risk Intelligence Platform / URIP (marca em maiúsculas). Feed inspirado no Instagram, paleta branco/creme e preto. Página de conexão removida a pedido do usuário; configuração técnica por ambiente.
+
+## Community Feedback
+Likes/dislikes públicos e pseudônimos por instalação, risco e bairro; janela de 24 h. Influenciam diretamente confiança pela média ponderada (base × 4 + likes) / (4 + likes + dislikes), preservando gravidade física. UUID local e registro de voto no servidor, sem conta ou coleta de GPS/nome. Um voto por instalação, sem garantia de identidade humana única.

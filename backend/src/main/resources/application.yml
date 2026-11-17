@@ -4,7 +4,7 @@ server:
     include-message: never
 spring:
   datasource:
-    url: ${DB_URL:jdbc:h2:file:./data/urbanrisk;DB_CLOSE_ON_EXIT=FALSE}
+    url: ${DB_URL:jdbc:h2:file:./data/urbanrisk;DB_CLOSE_ON_EXIT=FALSE;WRITE_DELAY=0}
     username: ${DB_USER:sa}
     password: ${DB_PASSWORD:}
   jpa:

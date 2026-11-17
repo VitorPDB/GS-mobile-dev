@@ -1,0 +1,26 @@
+{
+  "version": "1.2.0",
+  "backend_tests": 9,
+  "backend_build": "BUILD SUCCESS",
+  "unit_tests": 9,
+  "typescript": "passed",
+  "e2e": {
+    "passed": 2,
+    "seconds": 34.0,
+    "two_installations": true,
+    "switch_remove": true,
+    "confidence_updates": true,
+    "vote_and_reading_persist_after_abrupt_restart": true
+  },
+  "h2_write_delay": 0,
+  "web_export": "passed",
+  "android_hermes_export": "passed",
+  "native_qa": false,
+  "council_scores": {
+    "product": 4.7,
+    "backend": 4.7,
+    "analysis": 4.7,
+    "mobile": 4.7,
+    "quality": 4.7
+  }
+}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import type { RiskAlert } from './types';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import type { RiskAlert, Vote } from './types';
 import { theme as t } from './theme';
 import { isStale } from './sync';
 import { Icon } from './Icon';
@@ -11,8 +11,10 @@ const presentation = {
   OUTAGE:{icon:'flash-off',label:'Tempo sem energia',background:t.inset},
 } as const;
 
-export function AlertRow({alert:a,serverTime,savedAt,now}:{alert:RiskAlert;serverTime:string;savedAt:string;now:number}) {
+export function AlertRow({alert:a,serverTime,savedAt,now,onReact,voteDisabled,voting}:{alert:RiskAlert;serverTime:string;savedAt:string;now:number;onReact:(alert:RiskAlert,vote:Vote)=>Promise<void>;voteDisabled:boolean;voting:boolean}) {
   const [expanded,setExpanded]=useState(false);
+  const [voteError,setVoteError]=useState('');
+  useEffect(()=>setVoteError(''),[a.likes,a.dislikes,a.myVote]);
   const stale=isStale(a,serverTime,savedAt,now);
   const visual=presentation[a.type];
   const strong=a.severity==='Crítico'||a.severity==='Alto';
@@ -34,6 +36,21 @@ export function AlertRow({alert:a,serverTime,savedAt,now}:{alert:RiskAlert;serve
         <Text style={s.score}>Prioridade {a.score}/100</Text>
       </View>
     </View>
+    <View style={s.reactions}>
+      {(['LIKE','DISLIKE'] as const).map(kind=><Pressable key={kind} accessibilityRole="button"
+        accessibilityLabel={`${kind==='LIKE'?'Like':'Dislike'} em ${a.title}, ${a.district}`}
+        accessibilityValue={{text:`${kind==='LIKE'?a.likes:a.dislikes} votos`}}
+        accessibilityState={{selected:a.myVote===kind,disabled:voteDisabled||stale}}
+        aria-pressed={a.myVote===kind} disabled={voteDisabled||stale}
+        onPress={()=>{setVoteError('');void onReact(a,a.myVote===kind?'NONE':kind).catch(error=>setVoteError(error instanceof Error?error.message:'Não foi possível confirmar o voto.'));}}
+        style={({pressed})=>[s.reactionButton,a.myVote===kind&&{backgroundColor:t.stone},(pressed||voteDisabled||stale)&&{opacity:.5}]}>
+        <Icon name={kind==='LIKE'?(a.myVote==='LIKE'?'heart':'heart-outline'):(a.myVote==='DISLIKE'?'thumb-down':'thumb-down-outline')} size={23}/>
+        <Text style={s.reactionCount}>{kind==='LIKE'?a.likes:a.dislikes}</Text>
+      </Pressable>)}
+      {voting&&<ActivityIndicator color={t.ink} size="small" accessibilityLabel="Enviando voto"/>}
+      <Text style={s.votingWindow}>Votos · 24 h</Text>
+    </View>
+    {!!voteError&&<Text accessibilityRole="alert" style={s.voteError}>{voteError}</Text>}
     <View style={s.caption}>
       <View style={s.sourceLine}><Icon name="database-outline" size={17}/><Text style={s.source}>{a.sourceLabel}</Text><Text style={s.confidence}>Confiança {Math.round(a.confidence*100)}%</Text></View>
       <Text style={s.advice}>{a.recommendation}</Text>
@@ -48,7 +65,8 @@ export function AlertRow({alert:a,serverTime,savedAt,now}:{alert:RiskAlert;serve
       {expanded&&<View style={s.details}>
         <Text accessibilityRole="header" style={s.detailTitle}>Por que este alerta tem prioridade {a.score}/100?</Text>
         <Text style={s.body}>{a.explanation}</Text>
-        <Text style={s.body}>Origem: {a.sourceLabel}. Confiança de {Math.round(a.confidence*100)}% atribuída à categoria da fonte; não representa probabilidade de ocorrência.</Text>
+        <Text style={s.body}>Origem: {a.sourceLabel}. Base da fonte: {Math.round(a.baseConfidence*100)}%. Confiança combinada: {Math.round(a.confidence*100)}%, considerando os votos das últimas 24 horas. Não representa probabilidade de ocorrência.</Text>
+        <Text style={s.body}>{a.confidenceExplanation}</Text>
         <Text style={s.disclaimer}>Cenário e limites simulados para fins acadêmicos. Não substitui alertas oficiais.</Text>
       </View>}
     </View>
@@ -64,7 +82,8 @@ const s=StyleSheet.create({
   valueLine:{flexDirection:'row',alignItems:'baseline',gap:12,flexWrap:'wrap',paddingVertical:8},value:{fontSize:68,lineHeight:78,fontWeight:'500',color:t.ink,letterSpacing:-2.4},unit:{fontSize:24,color:t.secondary,fontWeight:'400'},
   readingFoot:{flexDirection:'row',justifyContent:'space-between',gap:10,flexWrap:'wrap',alignItems:'center',paddingTop:12,borderTopWidth:1,borderColor:t.outline},
   trend:{flexDirection:'row',alignItems:'center',gap:6},trendLabel:{fontSize:12,color:t.ink,lineHeight:18},score:{color:t.secondary,fontSize:12,lineHeight:18},
-  caption:{paddingTop:16,gap:12},sourceLine:{flexDirection:'row',alignItems:'center',gap:6,flexWrap:'wrap'},source:{fontSize:12,fontWeight:'600',color:t.ink,lineHeight:19},confidence:{fontSize:12,color:t.secondary,lineHeight:19,marginLeft:'auto'},
+  reactions:{flexDirection:'row',flexWrap:'wrap',alignItems:'center',gap:12,paddingTop:8},reactionButton:{minHeight:48,minWidth:64,flexDirection:'row',justifyContent:'center',alignItems:'center',gap:8,paddingHorizontal:8,borderRadius:6},reactionCount:{fontSize:14,color:t.ink,fontWeight:'600'},votingWindow:{marginLeft:'auto',fontSize:11,color:t.secondary},voteError:{fontSize:12,lineHeight:19,color:t.ink,paddingVertical:8},
+  caption:{paddingTop:8,gap:12},sourceLine:{flexDirection:'row',alignItems:'center',gap:6,flexWrap:'wrap'},source:{fontSize:12,fontWeight:'600',color:t.ink,lineHeight:19},confidence:{fontSize:12,color:t.secondary,lineHeight:19,marginLeft:'auto'},
   advice:{fontSize:15,lineHeight:23,color:t.ink},stale:{fontSize:13,fontWeight:'600',lineHeight:20,color:t.ink},
   expand:{minHeight:48,alignSelf:'flex-start',flexDirection:'row',alignItems:'center',gap:8,paddingHorizontal:4},expandLabel:{fontSize:13,fontWeight:'600',color:t.ink},
   details:{borderTopWidth:1,borderColor:t.line,paddingTop:18,gap:12},detailTitle:{fontSize:15,fontWeight:'700',lineHeight:22,color:t.ink},body:{fontSize:14,lineHeight:23,color:t.secondary},disclaimer:{fontSize:12,lineHeight:19,color:t.secondary},

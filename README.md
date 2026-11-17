@@ -63,6 +63,7 @@ Invoke-RestMethod -Uri http://localhost:8080/api/readings -Method Post -Headers 
 | GET | `/api/dashboard` | Alertas priorizados, 30 leituras recentes, horário do servidor, total persistido |
 | POST | `/api/readings` | Ingestão de leitura simulada; exige `X-Ingest-Token` |
 | POST | `/api/demo/tick` | Gera imediatamente nove leituras; exige chave e modo demo ativo |
+| PUT | `/api/readings/{readingId}/reaction` | Voto público: `{ "clientId":"UUID", "vote":"LIKE" }`; também aceita `DISLIKE` e `NONE` |
 | GET | `/actuator/health` | Disponibilidade |
 
 Tipos: `FLOOD`, `HEAT`, `OUTAGE`. Fontes: `SENSOR`, `PUBLIC_DATA`, `COMMUNITY`. Corpo: `type`, `source`, `district` (até 60 caracteres), `value` numérico e `observedAt` ISO-8601 opcional. Valores aceitos: chuva 0–300 mm/h, temperatura 0–65 °C, interrupção 0–10080 min. Horário deve estar nas últimas 24 h, com tolerância futura de 30 s. Sem horário, usa o do servidor. Confiança é atribuída pelo servidor e não pode ser escolhida no payload.
@@ -79,13 +80,15 @@ Recurso de **análise**, atendendo à alternativa “IA ou análise” do enunci
 
 Abaixo da primeira faixa: 10 pontos, baixo. Tendência crescente adiciona 5 pontos (limite 100), comparando a leitura anterior da mesma fonte, risco e bairro nos últimos 30 minutos. Variação deve superar 0,5 °C ou 2 unidades para os outros riscos. A lista usa a pontuação decrescente e desempate estável. Valores antigos continuam visíveis e marcados; não são prova de risco atual.
 
-Confiança fixa da categoria: sensor 90%, base pública 80%, comunidade 55%. **Não é probabilidade de ocorrência nem acurácia medida.** A confiança não reduz a gravidade física de um relato. Calibração desses valores e dos limiares com especialistas é necessária para uso real. Chuva é um indicador demonstrativo; sem drenagem, relevo e nível da água não determina alagamento real.
+Confiança base da categoria: sensor 90%, base pública 80%, comunidade 55%. Likes e dislikes ajustam a confiança no servidor pela fórmula **(base × 4 + likes) / (4 + likes + dislikes)**. A base entra como fração (90% = 0,90). Exemplos para sensor: sem votos 90%; um like 92%; um dislike 72%. Cada instalação pode ter um único voto ativo por risco e bairro: clicar novamente retira o voto e escolher o outro tipo troca o voto. Votos idênticos repetidos são idempotentes. Valem os votos das últimas 24 horas, compartilhados entre leituras desse acompanhamento para que os contadores não reiniciem a cada 12 s.
+
+**Não é probabilidade de ocorrência, acurácia medida ou validação da medição individual.** A confiança combina a origem com apoio/contestação da comunidade; a gravidade física e a ordenação por prioridade não são reduzidas por dislikes. A explicação do cálculo está no detalhe de cada publicação. Calibração desses valores e dos limiares com especialistas é necessária para uso real. Chuva é um indicador demonstrativo; sem drenagem, relevo e nível da água não determina alagamento real.
 
 ## Arquitetura, proteção e limites
 
-`api → service → repository → database`, com domínio separado. App: interface, hook de sincronização, cliente/validação e cache versionado por servidor. API de escrita protegida por chave; ela não é embarcada no app, que apenas consulta dados públicos simulados. CORS permite origens explícitas, não autentica clientes. No navegador usando outro host/porta, ajuste `CORS_ORIGINS` e reinicie o backend. No app nativo não se aplica CORS.
+`api → service → repository → database`, com domínio separado. App: interface, hook de sincronização, cliente/validação e cache versionado por servidor. Ingestão de leituras protegida por chave; ela não é embarcada no app. A votação é pública e pseudônima, separada da ingestão; o app envia suas reações e consulta dados simulados. CORS permite origens explícitas, não autentica clientes. No navegador usando outro host/porta, ajuste `CORS_ORIGINS` e reinicie o backend. No app nativo não se aplica CORS.
 
-Nenhum nome, GPS, telefone ou identificador pessoal é necessário. Banco guarda bairro fictício, medida, tipo, fonte e horário. App salva endereço da API e último snapshot no armazenamento local, sem criptografia por não conter dados pessoais ou credenciais. Leituras com mais de sete dias são removidas periodicamente. Não envie dados pessoais nos campos livres.
+Nenhum nome, GPS, telefone ou identificador pessoal é necessário. Banco guarda bairro fictício, medida, tipo, fonte e horário. App salva um UUID aleatório por instalação e o último snapshot no armazenamento local, sem criptografia. O servidor guarda esse identificador pseudônimo com risco/bairro, voto e horário. Não há vínculo com conta, nome, GPS ou telefone. O UUID não é credencial de autenticação e não aparece nos dashboards públicos. Snapshots são separados por servidor e instalação. Leituras com mais de sete dias são removidas periodicamente. Votos deixam de contar ao completar 24 horas e são removidos na limpeza horária seguinte (retenção de até cerca de 25 h). Não envie dados pessoais nos campos livres.
 
 Consulta e análise limitam-se às últimas **1000 leituras** (cerca de 22 minutos no simulador), para conter o custo no protótipo. Um bairro sem leitura nessa janela pode deixar a visão geral. Não é garantia de cobertura histórica. Até 30 leituras são devolvidas como histórico. Para uso em escala, materializar o estado por bairro/risco, paginar histórico, usar migrações versionadas e índices compostos, limitar ingestão, autenticar produtores por identidade, validar fontes, configurar HTTPS, backups e monitoramento. O simulador deve rodar em instância única; múltiplas réplicas exigiriam um produtor externo/coordenado. Não se promete alta disponibilidade com uma única instância.
 
@@ -136,3 +139,11 @@ As revisões dos cinco membros e o critério mínimo de 4,5 para todos ficam em 
 | A preencher pela equipe | A preencher |
 
 O repositório inclui histórico técnico gerado durante a construção assistida. Ele **não substitui commits reais dos integrantes** ao longo do desenvolvimento. A equipe deve compreender, adaptar e registrar sua contribuição antes de entregar. Não há publicação automática no GitHub.
+
+## Votação e limites do protótipo
+
+O GET dashboard aceita cabeçalho opcional `X-Client-Id` para devolver `myVote`. Inclui `likes`, `dislikes`, `baseConfidence`, `confidence` e `confidenceExplanation`. Respostas personalizadas usam Cache-Control no-store. A API de reações usa PUT e devolve 204; erro 409 indica leitura antiga ou conflito concorrente e requer atualizar/repetir. Leituras com mais de 90 s não recebem votos; o app não enfileira votos offline. O identificador persistido mantém a seleção ao recarregar. Sem armazenamento local disponível, a votação é desabilitada, preservando consulta.
+
+É **um voto por instalação/ocorrência**, não uma pessoa verificada. Apagar os dados, usar outro navegador ou enviar outro UUID permite criar outra identidade. Não há login nem proteção antifraude/limitação robusta de abuso; a fórmula não deve ser usada para decisões reais sem validação, autenticação e controles contra manipulação. O UUID é gerado com Expo Crypto: https://docs.expo.dev/versions/v58.0.0/sdk/crypto/.
+
+O H2 local e o banco E2E usam `WRITE_DELAY=0` para gravar o log sem o atraso padrão de buffer antes de confirmar commits. O teste encerra abruptamente o processo e verifica que leitura e voto persistem. Para URLs H2 customizadas em DB_URL, preserve esse parâmetro se desejar o mesmo comportamento. Referência: https://h2database.com/html/commands.html#set_write_delay.

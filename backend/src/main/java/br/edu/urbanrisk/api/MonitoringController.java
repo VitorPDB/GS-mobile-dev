@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,9 @@ public class MonitoringController {
     public record Input(@NotNull RiskType type,@NotNull SourceType source,
         @NotBlank @Size(max=60) @Pattern(regexp="[\\p{L}\\p{N} .'-]+") String district,
         @NotNull @DecimalMin("0") Double value,Instant observedAt) {}
-    @GetMapping("/dashboard") public MonitoringService.Dashboard dashboard() { return service.dashboard(); }
+    @GetMapping("/dashboard") public ResponseEntity<MonitoringService.Dashboard> dashboard(@RequestHeader(value="X-Client-Id",required=false) UUID clientId) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.dashboard(clientId));
+    }
     @PostMapping("/readings") @ResponseStatus(HttpStatus.CREATED)
     public Reading ingest(@RequestHeader(value="X-Ingest-Token",defaultValue="") String key,@Valid @RequestBody Input input) {
         authorize(key); return service.ingest(input.type,input.source,input.district,input.value,input.observedAt);
