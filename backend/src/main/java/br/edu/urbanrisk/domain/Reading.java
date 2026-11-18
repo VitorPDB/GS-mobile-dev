@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(indexes = @Index(name = "idx_reading_time", columnList = "observedAt"))
+@Table(indexes = {
+    @Index(name="idx_reading_time",columnList="observedAt"),
+    @Index(name="idx_reading_latest",columnList="type,district,observedAt,id"),
+    @Index(name="idx_reading_source",columnList="type,district,source,observedAt,id")
+})
 public class Reading {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) public Long id;
     @Enumerated(EnumType.STRING) @Column(nullable=false) public RiskType type;

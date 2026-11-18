@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-17",
+  "backend_h2": {
+    "tests": 12,
+    "failures": 0,
+    "build": "BUILD SUCCESS"
+  },
+  "client_tests": {
+    "tests": 11,
+    "failures": 0
+  },
+  "typescript": "passed",
+  "expo_doctor": {
+    "checks": 20,
+    "passed": 20
+  },
+  "android_config_introspection": "passed",
+  "web_export": "passed",
+  "android_hermes_export": "passed",
+  "e2e": {
+    "tests": 2,
+    "passed": 2,
+    "seconds": 38.3,
+    "real_api_restart": true,
+    "isolated_process": true,
+    "automatic_updates_observed": true
+  },
+  "android_device": "not executed",
+  "postgres_ci": "pending remote execution",
+  "npm_audit": {
+    "high": 26,
+    "knownAdvisory": "GHSA-fc5q-39xc-vjpf",
+    "patchedVersion": null
+  }
+}

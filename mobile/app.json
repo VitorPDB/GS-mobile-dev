@@ -7,14 +7,23 @@
     "userInterfaceStyle": "light",
     "android": {
       "package": "br.edu.urbanrisk.vigia",
-      "usesCleartextTraffic": true
+      "allowBackup": false
     },
     "web": {
       "bundler": "metro",
       "name": "URIP"
     },
     "plugins": [
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-font"
     ]
   }
 }

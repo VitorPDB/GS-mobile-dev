@@ -2,6 +2,29 @@
 
 Urban Risk Intelligence Platform acadêmica. Java/Spring Boot + React Native/Expo no mesmo repositório. Monitora **alagamentos, calor extremo e falta de energia** em três bairros fictícios. Sensores, bases públicas e relatos comunitários são **simulados**, inclusive quando enviados pela API. Não há integração com fontes oficiais.
 
+![Feed do URIP](docs/images/urip-desktop-feed.png)
+
+## Equipe
+
+| Integrante | RM |
+|---|---|
+| Lucas Zolla Assis | 557952 |
+| Lucas Baraldi Rodrigues | 555407 |
+| Vitor Pantarotto de Brito | 554961 |
+
+## Conferência da entrega
+
+Consulte a [matriz do enunciado](docs/ENTREGA.md), o [registro de teste Android](docs/TESTE-ANDROID.md) e o [relatório atual da auditoria](docs/AUDITORIA-ENTREGA.md). O projeto usa análise explicável, lista de eventos e avisos no app aberto — não um modelo treinado, mapa obrigatório ou push em segundo plano.
+
+Há um aviso transitivo de dependência sem correção upstream publicada nesta auditoria; veja [SECURITY.md](SECURITY.md). A aprovação dos testes não significa ausência de vulnerabilidades.
+
+Para obter o código:
+
+```sh
+git clone https://github.com/VitorPDB/GS-mobile-dev.git
+cd GS-mobile-dev
+```
+
 ## Executar no Windows
 
 Requisitos: Node.js 24, JDK 21 e Maven 3.9+. Caso não tenha Java/Maven, execute o instalador portátil abaixo; ele baixa ferramentas oficiais para `.tools/` e verifica checksums. Não modifica o Java instalado.
@@ -88,9 +111,9 @@ Confiança base da categoria: sensor 90%, base pública 80%, comunidade 55%. Lik
 
 `api → service → repository → database`, com domínio separado. App: interface, hook de sincronização, cliente/validação e cache versionado por servidor. Ingestão de leituras protegida por chave; ela não é embarcada no app. A votação é pública e pseudônima, separada da ingestão; o app envia suas reações e consulta dados simulados. CORS permite origens explícitas, não autentica clientes. No navegador usando outro host/porta, ajuste `CORS_ORIGINS` e reinicie o backend. No app nativo não se aplica CORS.
 
-Nenhum nome, GPS, telefone ou identificador pessoal é necessário. Banco guarda bairro fictício, medida, tipo, fonte e horário. App salva um UUID aleatório por instalação e o último snapshot no armazenamento local, sem criptografia. O servidor guarda esse identificador pseudônimo com risco/bairro, voto e horário. Não há vínculo com conta, nome, GPS ou telefone. O UUID não é credencial de autenticação e não aparece nos dashboards públicos. Snapshots são separados por servidor e instalação. Leituras com mais de sete dias são removidas periodicamente. Votos deixam de contar ao completar 24 horas e são removidos na limpeza horária seguinte (retenção de até cerca de 25 h). Não envie dados pessoais nos campos livres.
+O app não solicita nome, GPS ou telefone. Banco guarda bairro fictício, medida, tipo, fonte e horário. App salva um UUID aleatório por instalação e o último snapshot no armazenamento local, sem criptografia. O servidor guarda esse identificador pseudônimo com risco/bairro, voto e horário. Não há vínculo com conta, nome, GPS ou telefone. O UUID não é credencial de autenticação e não aparece nos dashboards públicos. Snapshots são separados por servidor e instalação. Leituras com mais de sete dias são removidas periodicamente. Votos deixam de contar ao completar 24 horas e são removidos na limpeza horária seguinte (retenção de até cerca de 25 h). Não envie dados pessoais nos campos livres.
 
-Consulta e análise limitam-se às últimas **1000 leituras** (cerca de 22 minutos no simulador), para conter o custo no protótipo. Um bairro sem leitura nessa janela pode deixar a visão geral. Não é garantia de cobertura histórica. Até 30 leituras são devolvidas como histórico. Para uso em escala, materializar o estado por bairro/risco, paginar histórico, usar migrações versionadas e índices compostos, limitar ingestão, autenticar produtores por identidade, validar fontes, configurar HTTPS, backups e monitoramento. O simulador deve rodar em instância única; múltiplas réplicas exigiriam um produtor externo/coordenado. Não se promete alta disponibilidade com uma única instância.
+O painel busca o último registro de cada combinação de risco e bairro independentemente do volume de leituras dos outros grupos. Uma ocorrência sem novas leituras continua visível como antiga até a retenção do banco removê-la. O histórico devolve até 30 leituras recentes. Há índices compostos para as buscas por grupo/fonte; o serviço ainda faz uma consulta de tendência por grupo, limitação do protótipo a considerar em cargas maiores. Para uso em escala, materializar o estado por bairro/risco, paginar histórico, usar migrações versionadas e índices compostos, limitar ingestão, autenticar produtores por identidade, validar fontes, configurar HTTPS, backups e monitoramento. O simulador deve rodar em instância única; múltiplas réplicas exigiriam um produtor externo/coordenado. Não se promete alta disponibilidade com uma única instância.
 
 ## Verificar
 
@@ -101,6 +124,8 @@ Na pasta `mobile`:
 ```powershell
 npm ci
 npx expo install --check
+npm run doctor
+npm run check:android
 npm run typecheck
 npm test
 npm run build:web
@@ -120,7 +145,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-O Playwright inicia o preview web automaticamente em 8091 e uma API própria em 8082, usando uma pasta `data/e2e-*` nova por execução como banco (preservada no reinício interno). **Não precisa iniciar o backend em 8080.** Reserve as portas 8091/8082 e não use um backend manual na porta 8082. O teste desliga e reinicia apenas a API que ele mesmo criou. A porta 8091 deve estar livre. O teste redireciona apenas o host das chamadas HTTP do app para a API real em 8082. Nenhuma resposta JSON é simulada pelo Playwright. A API de teste é encerrada ao terminar.
+O Playwright inicia o preview web automaticamente em 127.0.0.1:8091 e uma API própria em 127.0.0.1:8082, usando uma pasta `data/e2e-*` nova por execução como banco (preservada no reinício interno). **Não precisa iniciar o backend em 8080.** Reserve as portas 8091/8082 e não use um backend manual na porta 8082. O teste desliga e reinicia apenas a API que ele mesmo criou. As duas portas devem estar livres; o teste recusa a 8082 ocupada antes de criar seu processo. A saúde só é aceita depois que o filho criado termina de iniciar, e a parada tem limite de tempo. O teste redireciona apenas o host das chamadas HTTP do app para a API real em 8082. Nenhuma resposta JSON é simulada pelo Playwright. A API de teste é encerrada ao terminar.
 
 Se o Java 21 não estiver no PATH, defina `$env:TEST_JAVA='C:\caminho\jdk-21\bin\java.exe'`. O instalador portátil cria esse executável dentro de `.tools/jdk/`. Opcionalmente, para usar um Chromium já instalado em vez do download do Playwright, defina `$env:PLAYWRIGHT_CHROMIUM_EXECUTABLE='C:\caminho\navegador.exe'`.
 
@@ -132,13 +157,7 @@ Indicadores: latência da resposta medida no app; horário da última sincroniza
 
 As revisões dos cinco membros e o critério mínimo de 4,5 para todos ficam em `docs/CONSELHO.md`. Código em revisão é candidato até passar por todos.
 
-**Preencher antes da entrega:**
-
-| Integrante | RM |
-|---|---|
-| A preencher pela equipe | A preencher |
-
-O repositório inclui histórico técnico gerado durante a construção assistida. Ele **não substitui commits reais dos integrantes** ao longo do desenvolvimento. A equipe deve compreender, adaptar e registrar sua contribuição antes de entregar. Não há publicação automática no GitHub.
+O repositório inclui histórico técnico gerado durante a construção assistida. Ele **não substitui commits reais dos integrantes** ao longo do desenvolvimento. A equipe deve compreender, adaptar e registrar sua contribuição antes de entregar. O histórico público deve continuar com contribuições reais dos integrantes; veja [CONTRIBUICOES.md](docs/CONTRIBUICOES.md).
 
 ## Votação e limites do protótipo
 
@@ -147,3 +166,5 @@ O GET dashboard aceita cabeçalho opcional `X-Client-Id` para devolver `myVote`.
 É **um voto por instalação/ocorrência**, não uma pessoa verificada. Apagar os dados, usar outro navegador ou enviar outro UUID permite criar outra identidade. Não há login nem proteção antifraude/limitação robusta de abuso; a fórmula não deve ser usada para decisões reais sem validação, autenticação e controles contra manipulação. O UUID é gerado com Expo Crypto: https://docs.expo.dev/versions/v58.0.0/sdk/crypto/.
 
 O H2 local e o banco E2E usam `WRITE_DELAY=0` para gravar o log sem o atraso padrão de buffer antes de confirmar commits. O teste encerra abruptamente o processo e verifica que leitura e voto persistem. Para URLs H2 customizadas em DB_URL, preserve esse parâmetro se desejar o mesmo comportamento. Referência: https://h2database.com/html/commands.html#set_write_delay.
+
+A configuração Android usa os plugins oficiais expo-build-properties, expo-font e expo-system-ui. A verificação `check:android` inspeciona o manifesto produzido pelos plugins (HTTP da demonstração e backup desabilitado), sem afirmar instalação ou execução em aparelho.

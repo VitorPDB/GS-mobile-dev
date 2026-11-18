@@ -32,7 +32,7 @@ public class RiskAnalyzer {
         String trend = !comparable ? "Sem histórico comparável" : delta > tolerance ? "Em elevação" : delta < -tolerance ? "Em queda" : "Estável";
         if (delta > tolerance) score = Math.min(100, score + 5);
         String severity = score >= 85 ? "Crítico" : score >= 60 ? "Alto" : score >= 30 ? "Moderado" : "Baixo";
-        boolean stale = Duration.between(r.observedAt,now).getSeconds() > 90;
+        boolean stale = now.isAfter(r.observedAt.plusSeconds(90));
         String basis = switch(r.type) { case FLOOD -> "Intensidade de chuva"; case HEAT -> "Temperatura do ar"; case OUTAGE -> "Duração da interrupção"; };
         String explanation = basis + " de " + r.value + " " + r.type.unit + ". Faixas demonstrativas: "
             + limits[0] + " / " + limits[1] + " / " + limits[2] + ". " + trend + ". "

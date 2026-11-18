@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { spawn, ChildProcess } from 'node:child_process';
-import { mkdirSync, mkdtempSync, createWriteStream } from 'node:fs';
+import type { ChildProcess } from 'node:child_process';
+import { startOwnedBackend, stopOwnedBackend } from './backend-process';
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 let backend:ChildProcess;
@@ -9,15 +10,9 @@ const java=process.env.TEST_JAVA || 'java';
 const jar=resolve('../backend/target/urban-risk-1.0.0.jar');
 let databaseUrl:string;
 async function startBackend(){
-  backend=spawn(java,['-jar',jar],{cwd:resolve('..'),env:{...process.env,PORT:'8082',CORS_ORIGINS:'http://localhost:8091',DB_URL:databaseUrl,DEMO_ENABLED:'true'},windowsHide:true,stdio:['ignore','pipe','pipe']});
-  const log=createWriteStream(resolve('../data/e2e-backend.log'),{flags:'a'});
-  backend.stdout?.pipe(log);backend.stderr?.pipe(log);
-  await expect.poll(async()=>{try{return(await fetch('http://localhost:8082/actuator/health')).status;}catch{return 0;}},{timeout:30000}).toBe(200);
+  backend=await startOwnedBackend({java,jar,cwd:resolve('..'),databaseUrl,log:resolve('../data/e2e-backend.log')});
 }
-async function stopBackend(){
-  if(!backend||backend.exitCode!==null)return;
-  await new Promise<void>(resolve=>{backend.once('exit',()=>resolve());backend.kill();});
-}
+async function stopBackend(){await stopOwnedBackend(backend);}
 test.beforeAll(async()=>{
   mkdirSync(evidence,{recursive:true});mkdirSync(resolve('../data'),{recursive:true});
   const directory=mkdtempSync(resolve('../data/e2e-'));
@@ -27,7 +22,7 @@ test.beforeAll(async()=>{
 test.afterAll(async()=>{await stopBackend();});
 test.beforeEach(async({page})=>{
   // Real API in an isolated process; only its host is redirected. No mocked JSON.
-  await page.route('http://localhost:8080/api/**',route=>route.continue({url:route.request().url().replace('localhost:8080','localhost:8082')}));
+  await page.route('**/api/**',route=>route.continue({url:'http://127.0.0.1:8082'+new URL(route.request().url()).pathname}));
 });
 test('feed, análise, aviso e preservação dos dados após queda real',async({page,browser})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
@@ -73,8 +68,8 @@ test('feed, análise, aviso e preservação dos dados após queda real',async({p
   const otherContext=await browser.newContext();
   try {
     const other=await otherContext.newPage();
-    await other.route('http://localhost:8080/api/**',route=>route.continue({url:route.request().url().replace('localhost:8080','localhost:8082')}));
-    await other.goto('http://localhost:8091/');
+    await other.route('**/api/**',route=>route.continue({url:'http://127.0.0.1:8082'+new URL(route.request().url()).pathname}));
+    await other.goto('http://127.0.0.1:8091/');
     await expect(other.getByText('Conectado',{exact:true})).toBeVisible();
     const otherLike=other.getByRole('button',{name:'Like em Alagamento, Vila Esperança',exact:true});
     await otherLike.click();
@@ -87,11 +82,22 @@ test('feed, análise, aviso e preservação dos dados após queda real',async({p
     await page.getByRole('button',{name:'Atualizar',exact:true}).click();
     await expect(like).toContainText('1');
   } finally {await otherContext.close();}
-  await fetch('http://localhost:8082/api/readings',{method:'POST',headers:{'Content-Type':'application/json','X-Ingest-Token':'local-demo-only'},body:JSON.stringify({type:'HEAT',source:'PUBLIC_DATA',district:'Vila Esperança',value:42})});
+  const initialRefresh=await(await fetch('http://127.0.0.1:8082/api/dashboard')).json();
+  let nextObservedAt=initialRefresh.readings[0].observedAt;
+  await expect.poll(async()=>{
+    const snapshot=await(await fetch('http://127.0.0.1:8082/api/dashboard',{signal:AbortSignal.timeout(1000)})).json();
+    nextObservedAt=snapshot.readings[0].observedAt;
+    return nextObservedAt;
+  },{timeout:16000,intervals:[1000]}).not.toBe(initialRefresh.readings[0].observedAt);
+  const timing={previous:initialRefresh.readings[0].observedAt,current:nextObservedAt,intervalMs:Date.parse(nextObservedAt)-Date.parse(initialRefresh.readings[0].observedAt)};
+  mkdirSync(resolve('../docs/evidence'),{recursive:true});
+  writeFileSync(resolve('../docs/evidence/automatic-update-timing.json'),JSON.stringify(timing,null,2));
+  await test.info().attach('automatic-update-timing',{body:JSON.stringify(timing),contentType:'application/json'});
+  await fetch('http://127.0.0.1:8082/api/readings',{method:'POST',headers:{'Content-Type':'application/json','X-Ingest-Token':'local-demo-only'},body:JSON.stringify({type:'HEAT',source:'PUBLIC_DATA',district:'Vila Esperança',value:42})});
   await page.getByRole('button',{name:'Atualizar',exact:true}).click();
   await expect(page.getByText(/alerta\(s\) novo\(s\)/)).toBeVisible();
   await page.getByRole('button',{name:'Entendi',exact:true}).click();
-  const before=await(await fetch('http://localhost:8082/api/dashboard')).json();
+  const before=await(await fetch('http://127.0.0.1:8082/api/dashboard')).json();
   const survivingId=before.readings[0].id;
   expect(before.storedReadings).toBeGreaterThan(9);
   await stopBackend();
@@ -103,7 +109,7 @@ test('feed, análise, aviso e preservação dos dados após queda real',async({p
   await page.screenshot({path:resolve(evidence,'urip-desktop-offline.png')});
   await startBackend();
   await expect(page.getByText('Conectado',{exact:true})).toBeVisible({timeout:20000});
-  const after=await(await fetch('http://localhost:8082/api/dashboard')).json();
+  const after=await(await fetch('http://127.0.0.1:8082/api/dashboard')).json();
   expect(after.storedReadings).toBeGreaterThanOrEqual(before.storedReadings);
   const feedback=after.alerts.find((a:{id:string})=>a.id==='FLOOD:Vila Esperança');
   expect(feedback.likes).toBe(1);

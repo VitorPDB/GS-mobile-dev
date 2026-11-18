@@ -53,3 +53,17 @@ Pedido: likes/dislikes com contadores que alterem diretamente a confiança e ass
 O E2E identificou perda de gravação recente no encerramento abrupto com o buffer padrão H2. Corrigido com WRITE_DELAY=0 na execução local e no teste, sem relaxar as asserções. Nova execução preservou leitura, ID e voto. O membro Mobile exigiu evidência da faixa de reações no celular; novas capturas comprovaram os controles, a confiança e a análise.
 
 Todos os membros ≥4,5; incorporação autorizada somente após o último parecer. Pareceres integrais em reviews/votes-*.md. O veredito Mobile ship cobre a alteração inspecionada e a demonstração web, não QA nativo Android.
+
+## Auditoria para entrega no GitHub — 17/11/2026
+
+Antes de editar, foram considerados três grupos de riscos: entrega/publicação incompleta, configuração/validação Android e integridade/reprodutibilidade. Os cinco membros analisaram o candidato antes das correções; nenhuma nota da primeira rodada autorizava publicação.
+
+| Membro | Rodada 1 | Rodada 2 | Estado do candidato |
+|---|---:|---:|---|
+| Produto e requisitos | 4,1 | 4,7 | Aprovado para incorporar/publicar |
+| Backend e dados | 4,3 | 4,7 | Aprovado após cobertura e tempo exato |
+| Mobile e experiência | 4,2 | 4,7 | Aprovado após configuração Android |
+| Análise e privacidade | 4,3 | 4,6 | Aprovado com risco upstream explícito |
+| Qualidade e operação | 4,2 | 4,7 | Aprovado após isolamento do E2E |
+
+Todas as áreas atingiram o mínimo de 4,5 antes da incorporação/publicação. Pareceres em reviews/delivery-*.md. Essa aprovação não certifica aparelho Android, contribuições individuais, execução remota ainda não observada nem segurança de produção. O estado final do GitHub/CI deve ser conferido após publicar.

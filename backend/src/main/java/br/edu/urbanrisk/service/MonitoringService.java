@@ -23,16 +23,16 @@ public class MonitoringService {
     }
     @Transactional(readOnly=true)
     public Dashboard dashboard(UUID clientId) {
-        List<Reading> rows = repository.findTop1000ByOrderByObservedAtDescIdDesc();
-        Map<String,List<Reading>> groups = new LinkedHashMap<>();
-        rows.forEach(r -> groups.computeIfAbsent(r.type+":"+r.district,k->new ArrayList<>()).add(r));
-        Map<String,ReactionService.Feedback> feedback=reactions.summaries(groups.keySet(),clientId);
-        List<RiskAnalyzer.Alert> alerts = groups.values().stream().map(g -> {
-            Reading latest=g.getFirst();
-            Reading previous=g.stream().skip(1).filter(r->r.source==latest.source && r.observedAt.isBefore(latest.observedAt)).findFirst().orElse(null);
-            return analyzer.analyze(latest,previous,clock.instant(),feedback.getOrDefault(ReactionService.key(latest),ReactionService.Feedback.empty()));
+        List<Reading> latestReadings=repository.findLatestPerRiskAndDistrict();
+        List<String> keys=latestReadings.stream().map(ReactionService::key).toList();
+        Map<String,ReactionService.Feedback> feedback=reactions.summaries(keys,clientId);
+        Instant now=clock.instant();
+        List<RiskAnalyzer.Alert> alerts = latestReadings.stream().map(latest -> {
+            Reading previous=repository.findFirstByTypeAndDistrictAndSourceAndObservedAtLessThanOrderByObservedAtDescIdDesc(
+                latest.type,latest.district,latest.source,latest.observedAt).orElse(null);
+            return analyzer.analyze(latest,previous,now,feedback.getOrDefault(ReactionService.key(latest),ReactionService.Feedback.empty()));
         }).sorted(Comparator.comparingInt(RiskAnalyzer.Alert::score).reversed().thenComparing(RiskAnalyzer.Alert::id)).toList();
-        return new Dashboard(clock.instant(),true,alerts,rows.stream().limit(30).toList(),repository.count());
+        return new Dashboard(now,true,alerts,repository.findTop30ByOrderByObservedAtDescIdDesc(),repository.count());
     }
     @Transactional
     public Reading ingest(RiskType type,SourceType source,String district,double value,Instant observedAt) {
