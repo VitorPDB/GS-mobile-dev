@@ -12,6 +12,9 @@ Urban Risk Intelligence Platform acadêmica. Java/Spring Boot + React Native/Exp
 | Lucas Baraldi Rodrigues | 555407 |
 | Vitor Pantarotto de Brito | 554961 |
 
+## Video do projeto
+https://youtu.be/mH2c3ANjEAg
+
 ## Conferência da entrega
 
 Consulte a [matriz do enunciado](docs/ENTREGA.md), o [registro de teste Android](docs/TESTE-ANDROID.md). O projeto usa análise explicável, lista de eventos e avisos no app aberto — não um modelo treinado, mapa obrigatório ou push em segundo plano.
