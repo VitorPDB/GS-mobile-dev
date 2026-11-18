@@ -193,9 +193,9 @@
     },
     {
       "path": "docs/AUDITORIA-ENTREGA.md",
-      "bytes": 4153,
-      "sha256": "8ec4a07138f7e072a352bee1c1167e9ff57d6b9dbf6165de0363e9565dc7f4b0",
-      "gitBlobSha": "44a6f5f11204aab6091ff316115c91a7cd7733ea",
+      "bytes": 4615,
+      "sha256": "716455b8bb95154decc40924f56d30bd8f99bdc1e41dd7eb60b5cb8c4f3be24c",
+      "gitBlobSha": "be6a97acefb5fba1cdb23ab2e06739b72835648f",
       "binary": false
     },
     {

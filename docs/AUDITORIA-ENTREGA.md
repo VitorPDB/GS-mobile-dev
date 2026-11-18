@@ -40,3 +40,7 @@ Os cinco membros do conselho foram consultados antes de aplicar essas melhorias.
 - Validar os resultados remotos do workflow após publicação. Adicionar um job PostgreSQL não é prova de que ele passou.
 
 Os arquivos de evidência em evidence/ distinguem testes locais de execução remota. Os relatórios anteriores permanecem históricos de suas versões.
+
+## Publicação
+
+O código revisado ficou preparado e commitado localmente, com origin apontando para VitorPDB/GS-mobile-dev. Nenhuma alteração foi gravada no GitHub por esta sessão: a integração retornou 403 e o Git local não tinha autenticação não interativa disponível. Por orientação do usuário, o push será executado por ele no próprio terminal. CI remoto e PostgreSQL continuam pendentes até essa publicação e a conclusão dos jobs.
