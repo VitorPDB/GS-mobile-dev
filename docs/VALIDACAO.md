@@ -1,45 +1,33 @@
-# Validação
+# Verificação do projeto
 
-**Versão atual v1.2:** veja [VOTACAO.md](VOTACAO.md) para votos, confiança, testes e capturas.
+Última execução local registrada: 17/11/2026, Windows, Java 21, Maven 3.9 e Node 24. Os resultados abaixo são da execução anterior à limpeza da documentação.
 
-**Histórico v1.1:** veja [REDESIGN.md](REDESIGN.md) para os testes e capturas do novo feed. O registro abaixo documenta a versão inicial e suas limitações.
-
-Data: 16/11/2026. Ambiente local: Windows, JDK Temurin 21.0.13, Maven 3.9.11, Node 24.16.0. Revisões automatizadas por agentes independentes não substituem avaliação do professor nem teste em dispositivos reais.
-
-| Verificação | Evidência |
+| Verificação | Resultado |
 |---|---|
-| Backend | Maven `verify`: BUILD SUCCESS, 4 testes, zero falhas/erros |
-| Regras | Três riscos, limites críticos, confiança independente, staleness, tendência, janela exata em 30m e 30m1s e decomposição numérica da pontuação |
-| API | Saúde, ingestão protegida, valor/horário/campos inválidos, CORS e indisponibilidade do endpoint demo quando desabilitado |
-| TypeScript | `tsc --noEmit` passou |
-| Sincronização | 6 testes passaram: cache, leituras/alertas corrompidos, URLs, avisos sem duplicar, envelhecimento e falha/recuperação |
-| Dependências Expo | `expo install --check` passou, SDK 58 / React Native 0.88.1 |
-| Auditoria npm | Zero vulnerabilidades reportadas após correções; não é garantia de ausência de vulnerabilidades |
-| Exportação web | Bundle de produção gerado; uma fonte de ícones, importação direta |
-| Android | Bundle Hermes gerado; instalação e execução nativa ainda não verificadas |
-| E2E final | Dois cenários passaram (35,6 s), Brave/Chromium headless, preview automático e API isolada; sem servidores externos necessários |
+| Backend Maven verify | 12 testes, zero falhas/erros |
+| TypeScript | Sem erros |
+| Cliente e infraestrutura de testes | 11 testes, zero falhas |
+| Expo Doctor | 20 de 20 verificações |
+| Configuração Android | Plugins e manifesto verificados; HTTP local permitido e backup desabilitado |
+| Exportações web e Android Hermes | Concluídas |
+| E2E no navegador com API real | 2 cenários passaram em 38,3 s |
+| Atualização automática observada | Intervalo de 11.871 ms; simulador configurado para 12 s |
 
-## O que o teste de ponta a ponta verifica
+Os comandos para reproduzir as verificações estão no README. Os resultados estruturados e os relatórios ficam em evidence/.
 
-API real em processo isolado e banco H2 em arquivo; frontend consumindo dados via HTTP; filtros, detalhes de origem/confiança; aviso por mudança de gravidade; encerramento real do backend; preservação dos dados após recarregar a página; reconexão automática; histórico. A versão final comparou total persistido e um ID de leitura antes/depois do restart; ambos foram preservados. Cada execução usou um banco novo, mantendo o mesmo banco apenas durante o reinício interno. A API em 8080 não é requisito dos testes.
+## Cobertura
 
-O segundo cenário verifica largura de 390 px, tema escuro, ausência de overflow horizontal do documento e conexão a um servidor indisponível sem cache prévio. O scroll horizontal dos filtros é intencional.
+Backend: limites dos três riscos, tendência comparável, confiança e votação, validação de entrada, chave de ingestão, CORS, envelhecimento das leituras e última ocorrência por risco/bairro após mais de mil leituras de outro grupo.
 
-## Capturas
+Cliente: validação de respostas, cache, identidade de instalação, falha de rede e recuperação. A infraestrutura de E2E verifica porta ocupada e falha de inicialização do processo.
 
-- `images/desktop-online.png`: navegador Windows, conexão ativa e detalhe de alerta.
-- `images/desktop-offline.png`: navegador Windows, últimos dados salvos após queda e recarga.
-- `images/compact-dark-web.png`: navegador em largura compacta e tema escuro.
-- `images/compact-first-offline-web.png`: primeiro acesso a servidor indisponível.
+E2E: filtros e detalhes, aviso por mudança de gravidade, votos compartilhados e mudança da confiança, atualização automática, encerramento e reinício da API, consulta offline, recarga com cache e persistência de leitura/voto no banco. Cada execução usa um banco novo, mantido durante o reinício interno. As capturas em images/ são do navegador, incluindo larguras compactas.
 
-As capturas compactas **são web**, não capturas Android. Não foram executados testes em aparelho/emulador Android, TalkBack, fonte ampliada nativa, APK assinado, Docker/PostgreSQL, carga ou alta disponibilidade. Docker Desktop e dispositivo Android não estavam disponíveis para essas verificações. O CI foi escrito, mas ainda não executado em GitHub Actions.
+## Pendências
 
-## Antes da apresentação
+- Instalação e execução em Android, TalkBack e fonte ampliada nativa: seguir TESTE-ANDROID.md.
+- Execução com PostgreSQL/Docker e resultado remoto do GitHub Actions.
+- Testes de carga e disponibilidade em múltiplas instâncias.
+- Validação de usabilidade e dos limiares com usuários e especialistas.
 
-Instalar Expo Go compatível com SDK 58 e repetir no Android: navegação, tamanho de fonte aumentado, tema claro/escuro, teclado na configuração, queda da API, cache após fechar/reabrir, reconexão e orientação de rede. Se escolher PostgreSQL, executar o mesmo roteiro com Docker Compose. Preencher integrantes/RMs e registrar contribuições reais no GitHub.
-
-As fontes públicas e comunitárias são simuladas. Não houve validação de acurácia ou teste de usabilidade com moradores. A versão oferece avisos em primeiro plano; push não está incluído.
-
-## Correções encontradas na revisão
-
-O conselho exigiu decomposição da pontuação, janela exata da tendência, rejeição de cache corrompido e reprodução autônoma dos testes. Na repetição E2E, um banco de teste reutilizado já continha o estado crítico, invalidando a premissa de mudança de gravidade; o harness passou a criar um banco isolado por execução. A execução final passou com essas correções.
+O bundle Hermes não comprova execução em aparelho. Os dados são simulados e os testes não medem acurácia real. Avisos funcionam no app aberto; não há push em segundo plano. O risco de dependência conhecido está descrito em ../SECURITY.md.

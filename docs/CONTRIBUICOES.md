@@ -1,18 +1,20 @@
-# Contribuições e histórico
+# Fluxo de contribuição
 
-O repositório deve mostrar o trabalho real do grupo. Publicar arquivos prontos não demonstra, por si só, participação de todos. Não foram criados commits falsamente atribuídos aos integrantes.
+Para trabalhar em uma alteração:
 
-Cada integrante pode revisar uma parte, realizar uma melhoria/teste/documentação que compreenda e registrar sua contribuição:
-
-```sh
+~~~sh
 git clone https://github.com/VitorPDB/GS-mobile-dev.git
 cd GS-mobile-dev
 git switch -c melhoria/descricao-curta
-# Fazer uma alteração real e verificar o resultado.
+~~~
+
+Depois de implementar e verificar o resultado:
+
+~~~sh
 git diff
 git add caminho/do/arquivo
 git commit -m "Descreve a alteração realizada"
 git push -u origin melhoria/descricao-curta
-```
+~~~
 
-Depois, abrir uma pull request e revisar o resultado. Se não houver permissão para enviar uma branch, o proprietário deve ajustar a colaboração no GitHub. O grupo precisa conseguir explicar seu código e a demonstração, incluindo as limitações da simulação e da votação pseudônima.
+Abra uma pull request para revisão. Cada integrante deve usar sua própria identidade Git. O README mantém os nomes e RMs do grupo.

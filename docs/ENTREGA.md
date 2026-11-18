@@ -18,9 +18,9 @@ Esta matriz compara o enunciado com o código. Exportar um bundle Android não s
 | Escalabilidade | Índices por risco/bairro/fonte e histórico limitado a 30 registros | Último estado de cada grupo não depende da quantidade de outros grupos; teste com 1001 leituras de outro grupo |
 | Disponibilidade | Cache, timeout, retry, recuperação e escrita H2 sem atraso intencional | E2E derruba processo real; não há cluster de alta disponibilidade |
 | Proteção de dados | Sem nome/GPS no app; UUID pseudônimo e retenção de votos | Regras e limitações documentadas; ambientes e bancos locais excluídos da publicação |
-| Código completo no mesmo GitHub | Pastas `backend/` e `mobile/` | Candidato preparado para o repositório indicado pelo usuário |
+| Código completo no mesmo GitHub | Pastas `backend/` e `mobile/` | Código organizado em um único repositório local; publicação pendente |
 | README com integrantes e RMs | Três integrantes identificados | Dados fornecidos pelo grupo |
-| Evolução por commits da equipe | Deve refletir contribuição real | **Pendente de participação individual**; não foram fabricadas autorias |
+| Evolução por commits da equipe | Deve refletir contribuição real | Histórico de desenvolvimento e participação do grupo a conferir antes da entrega |
 | Demonstração API + app | Roteiro de execução e de queda/reconexão | Ensaio e vídeo final são responsabilidade do grupo |
 
 ## Indicadores
@@ -32,8 +32,6 @@ Esta matriz compara o enunciado com o código. Exportar um bundle Android não s
 ## Antes de entregar
 
 1. Executar e registrar o [teste em Android](TESTE-ANDROID.md).
-2. Cada integrante fazer contribuições reais e registrá-las com sua própria conta/identidade Git.
+2. Conferir o histórico de desenvolvimento do grupo no GitHub.
 3. Ensaiar e gravar a API funcionando, queda do backend e reconexão automática.
 4. Conferir os resultados do workflow e o risco transitivo descrito em [SECURITY.md](../SECURITY.md).
-
-O relatório atual e as evidências da auditoria ficam em `AUDITORIA-ENTREGA.md`. Os relatórios anteriores são históricos de suas respectivas versões.

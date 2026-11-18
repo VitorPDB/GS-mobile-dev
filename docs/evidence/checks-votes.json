@@ -15,12 +15,5 @@
   "h2_write_delay": 0,
   "web_export": "passed",
   "android_hermes_export": "passed",
-  "native_qa": false,
-  "council_scores": {
-    "product": 4.7,
-    "backend": 4.7,
-    "analysis": 4.7,
-    "mobile": 4.7,
-    "quality": 4.7
-  }
+  "native_qa": false
 }

@@ -16,14 +16,4 @@ UUID aleatório ExpoCrypto salvo localmente. Banco guarda UUID pseudônimo, chav
 
 ## Verificação
 
-- Maven verify:9 testes passaram, sem falhas/erros. Inclui inclusão/troca/retirada, idempotência, concorrência, janela24h, voto em nova leitura, CORS, entradas inválidas e gravidade independente.
-- TypeScript passou; 9 testes de sincronização/identidade/transporte passaram, conferidos por Qualidade.
-- 2 E2E passaram em 34,0 s: confiança 90→92%, troca para dislike 72%, retirar, persistir após reload, segundo perfil com contador 2/93%, compartilhamento, API morta/reiniciada com leitura e voto preservados, offline sem voto, teclado, panorama e capturas 320/390.
-- Build web e Android Hermes passaram (648 módulos, 1,8 MB). Android nativo, Docker/PostgreSQL e CI remoto não foram executados.
-- Correção de durabilidade: WRITE_DELAY=0 na URL H2 de execução e teste, após o E2E revelar 10→9 registros no kill imediato com buffer padrão. Asserções de persistência foram mantidas e passaram na repetição.
-
-Capturas: images/urip-reactions-like.png, urip-reactions-320.png e urip-reactions-390.png. Evidência web, não Android nativo.
-
-## Conselho
-
-Cinco membros com 4,7/5, todos aprovados no escopo da alteração acadêmica. Histórico e pareceres completos em CONSELHO.md.
+Consulte [VALIDACAO.md](VALIDACAO.md) para os resultados e limites dos testes.

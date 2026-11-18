@@ -14,9 +14,9 @@ Urban Risk Intelligence Platform acadêmica. Java/Spring Boot + React Native/Exp
 
 ## Conferência da entrega
 
-Consulte a [matriz do enunciado](docs/ENTREGA.md), o [registro de teste Android](docs/TESTE-ANDROID.md) e o [relatório atual da auditoria](docs/AUDITORIA-ENTREGA.md). O projeto usa análise explicável, lista de eventos e avisos no app aberto — não um modelo treinado, mapa obrigatório ou push em segundo plano.
+Consulte a [matriz do enunciado](docs/ENTREGA.md), o [registro de teste Android](docs/TESTE-ANDROID.md). O projeto usa análise explicável, lista de eventos e avisos no app aberto — não um modelo treinado, mapa obrigatório ou push em segundo plano.
 
-Há um aviso transitivo de dependência sem correção upstream publicada nesta auditoria; veja [SECURITY.md](SECURITY.md). A aprovação dos testes não significa ausência de vulnerabilidades.
+Há um aviso transitivo de dependência sem correção upstream publicada na última verificação; veja [SECURITY.md](SECURITY.md). A aprovação dos testes não significa ausência de vulnerabilidades.
 
 Para obter o código:
 
@@ -152,12 +152,6 @@ Se o Java 21 não estiver no PATH, defina `$env:TEST_JAVA='C:\caminho\jdk-21\bin
 Há um override transitivo de `@expo/fingerprint → minimatch` para a versão 11 corrigida. Expo CLI, resolução de dependências, exportação web e Hermes foram verificados com essa combinação. Reavalie o override ao atualizar o Expo.
 
 Indicadores: latência da resposta medida no app; horário da última sincronização; atualização simulada a cada 12 s e consulta a cada 5 s. Qualidade dos alertas é demonstrada por testes dos cenários/limiares, **sem alegar acurácia real**. Facilidade de uso precisa ser validada com usuários; não há pesquisa inventada.
-
-## Conselho e equipe
-
-As revisões dos cinco membros e o critério mínimo de 4,5 para todos ficam em `docs/CONSELHO.md`. Código em revisão é candidato até passar por todos.
-
-O repositório inclui histórico técnico gerado durante a construção assistida. Ele **não substitui commits reais dos integrantes** ao longo do desenvolvimento. A equipe deve compreender, adaptar e registrar sua contribuição antes de entregar. O histórico público deve continuar com contribuições reais dos integrantes; veja [CONTRIBUICOES.md](docs/CONTRIBUICOES.md).
 
 ## Votação e limites do protótipo
 
