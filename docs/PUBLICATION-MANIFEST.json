@@ -11,16 +11,16 @@
     },
     {
       "path": ".github/workflows/verify.yml",
-      "bytes": 3667,
-      "sha256": "6565de2e2a890fb5ba1f14992e7faa8224f97bb111d6c39ec41454a8da67c899",
-      "gitBlobSha": "1a5558d3a9fe33a1fd31c225aa9469b550997045",
+      "bytes": 3552,
+      "sha256": "fd6b3066ad6a3ca28bcf092f5fe40587c3c37758fab3b5391d20eb9cb419061c",
+      "gitBlobSha": "3b56eebf48c49cdd6ebe286ade123c7ba7ab7ee8",
       "binary": false
     },
     {
       "path": ".gitignore",
-      "bytes": 265,
-      "sha256": "d445c1f0dbf5711e3effa71f1ac05369c941c339648bcfc687c91eb9aa0c3e6d",
-      "gitBlobSha": "d3c5c5453558ed22bc2f184b178f3e3d8fed1f6f",
+      "bytes": 240,
+      "sha256": "fa094018e4a3543836aaf46c30708465511b86bbf97fb2441769a28e168dd287",
+      "gitBlobSha": "3e5e72464fab21244c3a37ac2288755a2dfd1b9c",
       "binary": false
     },
     {
@@ -186,23 +186,23 @@
     },
     {
       "path": "DESIGN.md",
-      "bytes": 1994,
-      "sha256": "1ea31bcad059ea3358df05d60d43a290e44dea88824970e6666c7b2a39ff466c",
-      "gitBlobSha": "afbb18d2793171dc418bffe331c22279f8401cd2",
+      "bytes": 1983,
+      "sha256": "e3dfbebeb3d4070688690a3372d0721accf6a9eea2f530621aa82119715cad1a",
+      "gitBlobSha": "222c731b45602eadc5caefc524e8fa6cc069d896",
       "binary": false
     },
     {
       "path": "docs/AUDITORIA-ENTREGA.md",
-      "bytes": 4615,
-      "sha256": "716455b8bb95154decc40924f56d30bd8f99bdc1e41dd7eb60b5cb8c4f3be24c",
-      "gitBlobSha": "be6a97acefb5fba1cdb23ab2e06739b72835648f",
+      "bytes": 4569,
+      "sha256": "fe8a51d3681cbc917f34c7d68828995331a23e5c85194c24c7267eaa27df41d5",
+      "gitBlobSha": "06429e3315f2174f629deb17276a57105721052a",
       "binary": false
     },
     {
       "path": "docs/CONSELHO.md",
-      "bytes": 5471,
-      "sha256": "cdbe9c8ec4ce1c888f816fe3e82cb43e86db5c92f6c6d30c8a5b57c9e567c5bd",
-      "gitBlobSha": "c352f097a423ccd2d06ae06f8440108bed79ec62",
+      "bytes": 5402,
+      "sha256": "29d8987308351f94f3c6de7e14eff2ce7227ba8ca9e80006664c1775bac70c6f",
+      "gitBlobSha": "2ea70fb90a17fab3809569f08a21268b5309110a",
       "binary": false
     },
     {
@@ -214,9 +214,9 @@
     },
     {
       "path": "docs/ENTREGA.md",
-      "bytes": 3881,
-      "sha256": "89756f85944ed3c8327a951575ddea1919e2985aa72468bd220299326737f103",
-      "gitBlobSha": "938f77485251f21ea8d655ed89628cc8686057aa",
+      "bytes": 3842,
+      "sha256": "2fd4d4f5884438209708448874f79333e9dfc7f6e42c6c7a69a6aa8a0d6cc8ea",
+      "gitBlobSha": "9600f9a22c6927237c717c2e22a576ec2839a953",
       "binary": false
     },
     {
@@ -228,30 +228,30 @@
     },
     {
       "path": "docs/evidence/backend-tests.txt",
-      "bytes": 316,
-      "sha256": "213710f1ee372af1586795f968164891c2ae9a5b91fcd67b7f1e1dd37a705370",
-      "gitBlobSha": "d30a6a9fe81e92993f260d9935624010c8c65357",
+      "bytes": 312,
+      "sha256": "074039cc75163bbac8d27486968dcf965298172f96e8d3d7e67ed241a44f98a9",
+      "gitBlobSha": "6cc85f8c3e50761268bf86c4c7abaa3f46d071d3",
       "binary": false
     },
     {
       "path": "docs/evidence/checks-redesign.json",
-      "bytes": 489,
-      "sha256": "d3a308e7b8e24683992e175409872fd4efff2c84dacb464705bd3bf882993013",
-      "gitBlobSha": "0825957a24be3b9d4c2b2031377c6a8932353f6d",
+      "bytes": 468,
+      "sha256": "1a7d7673201007afecaade4565437d934ffa6947ba1445ffb8e6cf83a592f6ab",
+      "gitBlobSha": "f757fd1665f2e9bd8654b5c509744fed869c4629",
       "binary": false
     },
     {
       "path": "docs/evidence/checks-votes.json",
-      "bytes": 590,
-      "sha256": "ded3991f7e9618424c896c02381bba5a0cc8752004903bebc6a59481bf8c9b6c",
-      "gitBlobSha": "1688e90e4504c3c11d35ef671ba3799d33f58bf7",
+      "bytes": 564,
+      "sha256": "ef2ae4d2b541e7b11467c0fb46902c15239928021b6ea089fd3953b38c5bf4c2",
+      "gitBlobSha": "b3b48b6f0f7fd160e719a48ab67b3ca415ae6c52",
       "binary": false
     },
     {
       "path": "docs/evidence/checks.json",
-      "bytes": 683,
-      "sha256": "8df8b77119f537513888d38343ff128fc6756f42d7d8871691655ed8d6c4deeb",
-      "gitBlobSha": "f8bce06cedc3199b7d7d9fb901e14bdd19044b88",
+      "bytes": 651,
+      "sha256": "b1fb8a80eba8f2a533f48b1d1ad5d20ea342784a9c94ae0834106e2e9490ecf5",
+      "gitBlobSha": "262ea73cbf036ba7c6b0f2668d427e7820feb543",
       "binary": false
     },
     {
@@ -263,23 +263,23 @@
     },
     {
       "path": "docs/evidence/delivery-checks.json",
-      "bytes": 761,
-      "sha256": "ceee67e4ead61ee770bff77f4eaba5c1280fbd4b49d1a36340a9d9aef9e7a399",
-      "gitBlobSha": "986f40462c0699f648afec095cab4025b5d714ed",
+      "bytes": 726,
+      "sha256": "f7e7dac9f0536abd751cfb5a258334bee3f4b619dc8d1ba1d7b09484f8305cf4",
+      "gitBlobSha": "34f8ee0898f40efa33fdeb7423449232fb2ce2f8",
       "binary": false
     },
     {
       "path": "docs/evidence/delivery-CoverageTest.txt",
-      "bytes": 312,
-      "sha256": "be42dcebe89c68fc82820de534333ace8f42350b3836582b8388adb75386aca9",
-      "gitBlobSha": "9ace55cc49aa9879f550b2af6e4088b4c85f87bf",
+      "bytes": 308,
+      "sha256": "aff9e2e1e11d20b7e0d2f3f988ca491ae848445f455609de79de67eb35d0c4f1",
+      "gitBlobSha": "cf0b3ea19570cd8edd67f720cf74c5e93c4a1469",
       "binary": false
     },
     {
       "path": "docs/evidence/delivery-MonitoringTest.txt",
-      "bytes": 316,
-      "sha256": "63d6a7e31dcfcb6d274bded8b97c8beb93717ba61f43ddc1f9cb362bfa7527f8",
-      "gitBlobSha": "58bbc0eaadc39863a9e9d5f3ce12f88858572dd5",
+      "bytes": 312,
+      "sha256": "a84bd1e6e767ec53d1a5ebe1bd53c9cb965f0d12db7a38b6c73b101cb459dd0a",
+      "gitBlobSha": "32ef739c67fe98c8e34178fd984136cc5f0fcf66",
       "binary": false
     },
     {
@@ -291,9 +291,9 @@
     },
     {
       "path": "docs/evidence/delivery-ReactionTest.txt",
-      "bytes": 312,
-      "sha256": "7fb73467da0c067a2c290a27a6672950368a111da86ff70dbbc8ac781bafabb8",
-      "gitBlobSha": "5c8bbde108090a08e23f4e6d3e9c55223c713e76",
+      "bytes": 308,
+      "sha256": "ea289bd0951a11fdb772e4cd4c789853c84843e33ad32e586b7844ba993049fb",
+      "gitBlobSha": "3f4166399f69d39e2cf7820a11b5765bfea0e04e",
       "binary": false
     },
     {
@@ -319,9 +319,9 @@
     },
     {
       "path": "docs/evidence/reaction-tests.txt",
-      "bytes": 312,
-      "sha256": "9349921b3468c93cf2a65c0e9fe825904966f3e3a4721eb969fc74e69ee33095",
-      "gitBlobSha": "3c4b9e0d296439b454942e2f7e02babf6da0905d",
+      "bytes": 308,
+      "sha256": "ac6ee087b958e3c0ed359d9e62db94adf3704ad45575bf7c21352d2d46e2c4a4",
+      "gitBlobSha": "2465e24aaa56aee008497a02f563129d389af044",
       "binary": false
     },
     {
@@ -424,240 +424,240 @@
     },
     {
       "path": "docs/REDESIGN.md",
-      "bytes": 2214,
-      "sha256": "6578b0b6a911574831599fa7b369da75f38fb706daf64dc73b3a949ebfcec75e",
-      "gitBlobSha": "72cf240d8d86e34fed2496aa32a2f5f250e287fd",
+      "bytes": 2193,
+      "sha256": "bfe8de89b753f7d927edb5eded9ac0e914787bc6bf3958884a151e9efeb61a8c",
+      "gitBlobSha": "b3fb13518b0a8c47f5e15fa65af177948273413e",
       "binary": false
     },
     {
       "path": "docs/reviews/analise-round1.md",
-      "bytes": 2697,
-      "sha256": "28a41f164ac68e6e290527ae51b8acbf428d3ece433c4e33eda8fee8655e98b8",
-      "gitBlobSha": "53b295771330229e5fc7586c05cfd68eb62637b1",
+      "bytes": 2673,
+      "sha256": "16ff9390ecf6780028a0558e4ccfe4104ef2722470cf1b8cc834948f66f7b8d2",
+      "gitBlobSha": "620c9d8769a5894a3edf69169e16b80e9f2db71f",
       "binary": false
     },
     {
       "path": "docs/reviews/analise-round2.md",
-      "bytes": 1492,
-      "sha256": "59c350e5bcb2e0d965e5ba9039fbd1a3f817756c6cf43fb81ddd3549e7c3a076",
-      "gitBlobSha": "78815830494b5159735ad48f4cbc9adb9122625c",
+      "bytes": 1478,
+      "sha256": "3a9df70226d342fd357978694596b538951ced339322d2918b341dbef20e26b8",
+      "gitBlobSha": "ff7c26d4c3134dcd6322acc46f73d77bdfe6d8dc",
       "binary": false
     },
     {
       "path": "docs/reviews/backend-round1.md",
-      "bytes": 2768,
-      "sha256": "1bcf6ba6ffe2641761944affd8aab2bd53d56118c6b498e52f7eb654f656b8b1",
-      "gitBlobSha": "65b4fe050ff54fe53312b17588e32bc79e0019e1",
+      "bytes": 2745,
+      "sha256": "1cb0337c66b980bb045f7af5a0b9556ca9151c6a6ff57c8c51a8ddc86fe85b40",
+      "gitBlobSha": "60f3a3c60c139b0b4c8c8094b893bffec3d824e5",
       "binary": false
     },
     {
       "path": "docs/reviews/backend-round2.md",
-      "bytes": 1618,
-      "sha256": "560a222fbcb147bb86e5b6107e06d593ec20f0b9285b37216588f9c3cb137e8a",
-      "gitBlobSha": "ea0886b9349df5135b372e6225a09c53919babf8",
+      "bytes": 1602,
+      "sha256": "1d6029a3521e46641a6f70f521b4df910e1eb2b1075fdd3ddf10b79e18ddd0e9",
+      "gitBlobSha": "8d50761df331ce0ca5b37c4e4d665440a0fc62b3",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-analise-round1.md",
-      "bytes": 4294,
-      "sha256": "ee28b67757f63ff353e466bdc92a3bd5575dcfa21621d01be7b1f28118abd114",
-      "gitBlobSha": "c9fd7faa53b1da798339393098400c03070e9cbe",
+      "bytes": 4264,
+      "sha256": "5f3c20e39ff04d387ae7acb6aee0bfc179af8cc96d664695c67708693fd8ce70",
+      "gitBlobSha": "10cba0f3f40a2aca3e098b0b813024dcf3850758",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-analise-round2.md",
-      "bytes": 4246,
-      "sha256": "672bd557b28d07c8079a3b12c66ea2a62a666ac7a7aabfe4c1b860da0ef25e1c",
-      "gitBlobSha": "a755418cede9da074dc05566f9456bbafbcb0034",
+      "bytes": 4213,
+      "sha256": "86534cb987707e777790012d3d857a86c5710545360eb9a50330389f6f37a0dd",
+      "gitBlobSha": "28527ec22dfc3272afdb6507f70d5d043f1f9515",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-backend-round1.md",
-      "bytes": 3983,
-      "sha256": "36bb2f00786658f7d4ebd682636b5713c076889fdfc1fe615ce8ca2bbc4ede34",
-      "gitBlobSha": "aed7bdac1ae686f81c2db063ab2569ef1631bb19",
+      "bytes": 3952,
+      "sha256": "f802afbf04daa71baa6045ecc9069cfe672e786aa30c8025fa5be53e806c417a",
+      "gitBlobSha": "fc9dee3861643c8975d2d456b689986d56a2adef",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-backend-round2.md",
-      "bytes": 2967,
-      "sha256": "0e6712ac08a34dc1aeee443190f80091cc3e6f402e24b05ef105a4b804fd36e7",
-      "gitBlobSha": "9080b636c7c3173e59432f371fde99ee15de82ea",
+      "bytes": 2941,
+      "sha256": "1e2045b5c15b28ecc676dcf5a76e934265df02fc0bb157c43f731ed1f154d3af",
+      "gitBlobSha": "1722911f7aa7bc2412340155cfc07b2e42f20ba3",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-mobile-round1.md",
-      "bytes": 4712,
-      "sha256": "58a6aa4842edc3f8fde6819ac54a2ec7225e3f62b139a73910150222a12ab9c9",
-      "gitBlobSha": "890b2a798fd7a1d320e57f546824d6a7cd2e88da",
+      "bytes": 4673,
+      "sha256": "68d73547eaea0a80541457bd3c23f5a51fc540f737039504ce7b604715ebb05b",
+      "gitBlobSha": "c11a2f90dddb9231c0b60dabf76f2e54fd4ce0a2",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-mobile-round2.md",
-      "bytes": 3225,
-      "sha256": "f5c63e37bebeca5a4578ddbc2fd2e78b7f5f0e2fffe9941ac6727489edd3faad",
-      "gitBlobSha": "d83d1b44fa2cb0f3aabe82f0c6f6c52007650b8d",
+      "bytes": 3190,
+      "sha256": "cd9df71c5f4bcdef43f078b454ad894b82f99d64006c83624df7c03ccde327ca",
+      "gitBlobSha": "94d554027ac91a2b029ed4c01dd4f67796bf9df8",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-produto-round1.md",
-      "bytes": 5720,
-      "sha256": "4527c211fd91b44c829d4c17c88ce3f9f314168ad31313638a0d0f940eaca61e",
-      "gitBlobSha": "7bb5d20068220761c5afecc8510ce1bf24ed7e51",
+      "bytes": 5673,
+      "sha256": "565a7fc7b69de385109fd28f0eb463f2d1ffa34004366778a8ed33d049497702",
+      "gitBlobSha": "118732b55809415ae13c11206968c288df9f2fe6",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-produto-round2.md",
-      "bytes": 4246,
-      "sha256": "ae64c4239e91a9e3c77ce0de6324817bb89e1dab9e8e9d6f271caca58a046051",
-      "gitBlobSha": "556878e7d7c75beb68868a48db4e3420a10c43ce",
+      "bytes": 4208,
+      "sha256": "a2ab51468c3f5e42aae65e4805efeef5b5adf0ffd7095c7ba7512fcf7352a254",
+      "gitBlobSha": "40a14d63f135901c1c158123bb5e47a2210acd00",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-qualidade-round1.md",
-      "bytes": 3732,
-      "sha256": "ea75d2e69a541cdaf6052bc88972498b7d9be0eec2b5135b4a20291eced5d1d1",
-      "gitBlobSha": "43035f66ffeb9f552a067dee3a6716edb5d49c3c",
+      "bytes": 3703,
+      "sha256": "6c551167488e28dd7550ce205435f7889b146e35441d81fe76055131f7ad174c",
+      "gitBlobSha": "83e9a22358c4ff3641a9d1acb1ba0698cec356d1",
       "binary": false
     },
     {
       "path": "docs/reviews/delivery-qualidade-round2.md",
-      "bytes": 3992,
-      "sha256": "1d35328a1b7382845c0eac1afe184044eced2666218bd8d300cabe9f8cc7b04b",
-      "gitBlobSha": "d1934278595369e7ce9bc8d08f70e4287dd58950",
+      "bytes": 3960,
+      "sha256": "5a9bc056eeabfa4cd6cc333b5b6b48c0cc3fa7cc661755d642efb1f174112e77",
+      "gitBlobSha": "fd6b00aebf68fa56dca9ce3b582c3361cdaea851",
       "binary": false
     },
     {
       "path": "docs/reviews/mobile-round1.md",
-      "bytes": 3665,
-      "sha256": "35f422b004189080f76fa778e69a36b02d2eef95b03a1bc607c1dbeaf5eb5758",
-      "gitBlobSha": "2ca3a51fd7f02a5b21db5529e5f13d9705d373d7",
+      "bytes": 3634,
+      "sha256": "634c4ce1192a0bb27ccdfefcde0f2998e5d6d8d4da138b7b365f188c4926ca5f",
+      "gitBlobSha": "ec531ade36487a658db3ea2b1763116861493019",
       "binary": false
     },
     {
       "path": "docs/reviews/mobile-round2.md",
-      "bytes": 2245,
-      "sha256": "7067b64dcf357d9f1e2eafe1f40dec00d10b434426fcba495eb2b1f8fbecf116",
-      "gitBlobSha": "7835812de3f38e06d0ac336afe4c3930c063dc2e",
+      "bytes": 2216,
+      "sha256": "84cd9e65fa3c640bc871a0e078c8e33054ce2fa708bb6bd3033967ce330430f7",
+      "gitBlobSha": "720e175a81433533087d3476df0b57a609c82545",
       "binary": false
     },
     {
       "path": "docs/reviews/produto-round1.md",
-      "bytes": 3643,
-      "sha256": "f9dfca4fc1bcccbe7eec44aa147d6957ca8382b74e93c0b70710bf39d36c3f5b",
-      "gitBlobSha": "a3cd84d1df95974407652ef64390d5d8d26927b2",
+      "bytes": 3604,
+      "sha256": "df0b5c45f3092d2b44a0b91ecaa46d4f600a6472c2344733ec15b7b4d79cf0ad",
+      "gitBlobSha": "936352615afdc3c96564a82cc91d48d332b56925",
       "binary": false
     },
     {
       "path": "docs/reviews/qualidade-round1.md",
-      "bytes": 3169,
-      "sha256": "5cd301f168ee67d45c67b23471886512059ef75966d2d7e4f49f5ff1d3b14ef4",
-      "gitBlobSha": "10f5fff423973e00558982ceaed443e5422ad794",
+      "bytes": 3140,
+      "sha256": "ed9879e88357858d83c5b01d3ad56419ec866390c816d3c91dff325eceb78d11",
+      "gitBlobSha": "525ec06eca8bc775eb241f6c7f3df7e2e40bf5ab",
       "binary": false
     },
     {
       "path": "docs/reviews/qualidade-round2.md",
-      "bytes": 2705,
-      "sha256": "4244fb576f78bfb538c67da98ec5b1ac7c909e4a9db77dddadd73af70f9a3ed4",
-      "gitBlobSha": "87cbaa752a0e130a8e56244b0952701119a1c813",
+      "bytes": 2683,
+      "sha256": "2e9a4e7dacda939399396de0e907a281d155b078c00b35a2dce8746f89693771",
+      "gitBlobSha": "88bcfa5bb302b6a6ddc35e87629287f81d03acf3",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-analise-round1.md",
-      "bytes": 2601,
-      "sha256": "228950a313773ed991f09c7ba72180fd4a0abdb3cafbd2ceffd6f83a2a398236",
-      "gitBlobSha": "7692b20aa5cd8fed8ded36077bd67e23b482efbe",
+      "bytes": 2578,
+      "sha256": "16050d69fcf5f75ada02d1b6b4dac802076753f718310e28d8c19c09765f19ba",
+      "gitBlobSha": "48618bcee6afbdf605900076a455cac8f3f08759",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-backend-round1.md",
-      "bytes": 2301,
-      "sha256": "6f90d4ab6c7b8559b6af260d12cedea5cfdb1f8d28fd2bfaa9212f481f133ec5",
-      "gitBlobSha": "d7703aaa513a30e2bb1deac084d0a0267c986521",
+      "bytes": 2277,
+      "sha256": "82d2b14dbd0058b15010783edbccdfecc9c51b33144f412eb2e26c3ec65fef3f",
+      "gitBlobSha": "689fe08e7e7f7dcc8194c8bb2989c769a79c6a8e",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-mobile-round1.md",
-      "bytes": 5169,
-      "sha256": "a108ff417eb0abb23b96fbe0354eab5c627b1257e51740ae7d1221ddbdfd16f9",
-      "gitBlobSha": "ac64d438d4836bcd6bcf8ca4786a581a6f81c831",
+      "bytes": 5141,
+      "sha256": "49b4508775f44a7e5d3c2d35c929281ba03681ae996a0495fe4a96a6b66babb2",
+      "gitBlobSha": "c56912803ca2a9bb4be297745d9b2d52b7a442da",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-mobile-round2.md",
-      "bytes": 3951,
-      "sha256": "f33baba3be77273e8df88591308c93c4db1176bfb31207eef249075779aee5d8",
-      "gitBlobSha": "e98bea9f03fde80bcb117971f72bfca86cf9d453",
+      "bytes": 3927,
+      "sha256": "781bb872e8612d1eefcc0cd735bc7fc0d75682c37cf6162ec8b3fdb1207ab995",
+      "gitBlobSha": "423ebf04f2106e070001afd48905a03e5412d233",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-produto-round1.md",
-      "bytes": 3202,
-      "sha256": "8a299086b0e2553ca27031fac3c223ba22fec3fe31c828cefc3e7ff6df66928e",
-      "gitBlobSha": "b5cdf11e42f870d6ca17b475281904bf82ff20fd",
+      "bytes": 3171,
+      "sha256": "ece43f2c3ef1162163cbd22b8b4ff23ebd2b0b169d0cb99f1dfded308f138995",
+      "gitBlobSha": "6b6d0a7169c98c7bbba547f8a6f8dfbeee16a5d0",
       "binary": false
     },
     {
       "path": "docs/reviews/redesign-qualidade-round1.md",
-      "bytes": 3394,
-      "sha256": "9c7cb57f43071517291ecd9a7e316b547d81385925b8e6b5b89e57865df15274",
-      "gitBlobSha": "2e4b9f0b7fed803c22ae9d6fb13731cd1bbf7573",
+      "bytes": 3361,
+      "sha256": "206026b9299a0fb518aac9acdfa0b91a5ba63b37ef748c12e76ce84344c0b1cc",
+      "gitBlobSha": "a0bc16e3ca143fa3a9c667973fdddf050a5ec723",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-analise-round1.md",
-      "bytes": 3093,
-      "sha256": "c6a330f17ad9956670bfbb5b97d4fd5d9575f8f216792af9be33424f59e0a022",
-      "gitBlobSha": "0f3927aa376be66db9535cb15f38a6af4a196ea3",
+      "bytes": 3064,
+      "sha256": "cd9a5b778a0b3e9ad6512e8fb7ec52afb46d79958bca91c010020e0679f2e6f8",
+      "gitBlobSha": "b8f346e94a064de8d4f956e26b23d0da59915842",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-backend-round1.md",
-      "bytes": 3086,
-      "sha256": "ae9bf8a390971ec2509870a8ac219eac6f2c1c359e61d3a4ae4e7220d0610e31",
-      "gitBlobSha": "5888f2659838363504d801c555aa54078c9f4b01",
+      "bytes": 3060,
+      "sha256": "060f391c81a31f4206cd1a58560fd322024bc4fa63dd77a74a6d823620f88a41",
+      "gitBlobSha": "62784e73268d5c9d1cf459b77777a660aeabf09d",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-backend-round2.md",
-      "bytes": 2107,
-      "sha256": "3c05bf575885c06201431f7538cc94362e28f526a879b958eff2e69f4655d89c",
-      "gitBlobSha": "4502bafb6893b1e447708c82df44350a023bd048",
+      "bytes": 2084,
+      "sha256": "f71090a308606314f6484bb92c54dbae30b16cefde6123b30490694abd349eaf",
+      "gitBlobSha": "969d091ef65bddc1e2f2f2322de253b932e47925",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-mobile-round1.md",
-      "bytes": 4508,
-      "sha256": "17909a8ead79849b788eadc311dbc1f346aadaae749efcfdc21194696c7e2529",
-      "gitBlobSha": "180cfb3f63af34d516ed4e0a598d3d4e1d639c46",
+      "bytes": 4479,
+      "sha256": "aafa3948dd5885d9d6e88927c8883a1e2a0bcf91455839630580c0b59e8a4060",
+      "gitBlobSha": "b1c5cdcf508ef45dcf86e097cd6ab99012e6f6a4",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-mobile-round2.md",
-      "bytes": 5327,
-      "sha256": "40d63780f211b00a40836455e19728814d125a333eef797b3dac679aefd8e06b",
-      "gitBlobSha": "b1023b9a1a11f265db793b026830e7ff68852211",
+      "bytes": 5298,
+      "sha256": "e388c9426c969a43e9f5ce305aecb5981f0c329c54a8fcd2b0e4f3dae25b1f0c",
+      "gitBlobSha": "96a2eac43c9081120be8feb40e273e9675245b0a",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-produto-round1.md",
-      "bytes": 3136,
-      "sha256": "3b19016677a40bc41b285d7fbb2d0527723204202de03989e794ca8025b0f34d",
-      "gitBlobSha": "e92a2664064393b88f9452bb9fea6e499a768995",
+      "bytes": 3107,
+      "sha256": "6f4a624f9deadffdd7191f9a6a214d51e7a7ef41f76e89962c9f3bfa1aaec979",
+      "gitBlobSha": "17241c540c1ae8d561cf35d9c086c5ddb01ff162",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-qualidade-round1.md",
-      "bytes": 2163,
-      "sha256": "f6433e7867cde4b64c7c2ccbe5e697021efab665703afdfbd5f14d55cca6cf92",
-      "gitBlobSha": "411a046747917c173d8da59272f13889c99689e3",
+      "bytes": 2136,
+      "sha256": "d6726460c06af776daecaca42e7755879cce223b6d96598ad890d6ab73b1025b",
+      "gitBlobSha": "4876eae50f79f7c54fe8d719574147a7dc91ae3d",
       "binary": false
     },
     {
       "path": "docs/reviews/votes-qualidade-round2.md",
-      "bytes": 2760,
-      "sha256": "30db4a20c94c7f6ffaca7a3190bfcf19b1d526395b44866e9634b8518e317845",
-      "gitBlobSha": "5156aa82a568c9c8e4addc0638326f6917cca7ff",
+      "bytes": 2729,
+      "sha256": "abfe8ace7611cc18c106588e3c2c70a3a17cfeb2c27a7ad785bd40b1e8e959e8",
+      "gitBlobSha": "c0bdc6c5deae373edd70ba96afdf44945c145dbb",
       "binary": false
     },
     {
@@ -669,16 +669,16 @@
     },
     {
       "path": "docs/VALIDACAO.md",
-      "bytes": 4201,
-      "sha256": "e4b9c6d80123bdfd59596ec782eeab81cd8143e118c3d916babd2316366aaeac",
-      "gitBlobSha": "dad25eea3a68bb0f66de0177973b2de6d86c75e8",
+      "bytes": 4156,
+      "sha256": "52d2ecddb51855a0f0482d329bbdd599a9a6646751e706fa70d9931bcc451fba",
+      "gitBlobSha": "1f13042fe7785ff5843e2eec43f37dd7bb6ed60b",
       "binary": false
     },
     {
       "path": "docs/VOTACAO.md",
-      "bytes": 3150,
-      "sha256": "1091014e318b4e3dc6f20c597e8e6c776eba4470cdb3d6c2090c55879fd50ba1",
-      "gitBlobSha": "d273232a73a4b7833f30349ecde61a5c3a396412",
+      "bytes": 3121,
+      "sha256": "c4776b2bfd0c8d8fdd8a13e46d610fb7eb3a82dac17869d6d3da1c2e704c973b",
+      "gitBlobSha": "a961fb6340be8410e4ddfabce2cc0e59a5f185fc",
       "binary": false
     },
     {
@@ -690,23 +690,23 @@
     },
     {
       "path": "mobile/app.json",
-      "bytes": 587,
-      "sha256": "f86429afb684c1be6f8fbd5bec9f54cfaeaf8485d1cc139fa2c471c18889d254",
-      "gitBlobSha": "bcb5298354fbfb742a2a37394c11669fba424ea3",
+      "bytes": 558,
+      "sha256": "b64ee83940f67d9d34f5122bc31a35f6ba87bfe4b5713d8b2bbfbd392ce3ceaf",
+      "gitBlobSha": "684bf7bef42de186c9c37d72338eb54ab7cc3585",
       "binary": false
     },
     {
       "path": "mobile/App.tsx",
-      "bytes": 14738,
-      "sha256": "5955985bed3f6cbfc550cb71a8db179f6f4ae021842e4bd0ec8d57dd7cc71b57",
-      "gitBlobSha": "1a57e46b3cb72195d26c52bfab2e64dbe25d4754",
+      "bytes": 14628,
+      "sha256": "e1a92e93c1fcbfa5e5bf8133d16b83c667c7b250017594cc007fe5677ebc7ec4",
+      "gitBlobSha": "fb48a10c4a37a17a53accba9657f71f50fcf3ea8",
       "binary": false
     },
     {
       "path": "mobile/e2e/application.spec.ts",
-      "bytes": 10311,
-      "sha256": "b34f34e355cad011a9b4f068c1af51c5975e4af776ef70d52d10e2cc6323a1ab",
-      "gitBlobSha": "74c89d09ae877ee04b46d2114965a8d9c763c7c0",
+      "bytes": 10153,
+      "sha256": "acaaf75a154999870eed0d427060e732264f74cc94550edc0819b6a4c1c45eed",
+      "gitBlobSha": "ed0fe7c489287114b4b05fc84deadb01f03c7335",
       "binary": false
     },
     {
@@ -725,44 +725,44 @@
     },
     {
       "path": "mobile/package-lock.json",
-      "bytes": 278399,
-      "sha256": "21bf6e2e3a4c46ad855711c258a99a0586afe7e5e8d1cffb4e1c9df93eaae9a7",
-      "gitBlobSha": "76d5aa009d8118396b348f40fd7f0f1465637ff4",
+      "bytes": 271055,
+      "sha256": "a89f80035bfe42eb55559ac24fb126b0e7969710e011c90b1d616c543453fe81",
+      "gitBlobSha": "257cd5ab43abb5be689cde74f73a355671d54051",
       "binary": false
     },
     {
       "path": "mobile/package.json",
-      "bytes": 1360,
-      "sha256": "8704779577ddd43436fe54b4d6adfcfe3bfca67047482059e181c5401ce996c9",
-      "gitBlobSha": "2223995ecf461cac55f7e713ebed8201628263a1",
+      "bytes": 1313,
+      "sha256": "c38aa750be06c7cdd78b696b4712b3e6e31f39d0bf46051b4e2193d91e43457d",
+      "gitBlobSha": "353082ac17396a1e29aed450a4c302c8e8c84809",
       "binary": false
     },
     {
       "path": "mobile/playwright.config.ts",
-      "bytes": 471,
-      "sha256": "93c21bcabf876c449bc505f7505f5bb81ab2319034ef9cdf5c8a9d7b5d60e4ae",
-      "gitBlobSha": "ad72cf98613b2662e893c2a9740ea757014468dc",
+      "bytes": 464,
+      "sha256": "84b7cab52b82c028979d67134f00c685c833a6a3e9461c8530d0bd342cce811e",
+      "gitBlobSha": "c4d24feda773808327e4d27b8520278892194015",
       "binary": false
     },
     {
       "path": "mobile/scripts/check-android-config.mjs",
-      "bytes": 1807,
-      "sha256": "04942df53f3c827864ee4cb9ae845c7f01791c27188d3453d9ad52b2a8fd6664",
-      "gitBlobSha": "54ea46f34dc92c1b3959c4fd706b251a01c8f6c4",
+      "bytes": 1785,
+      "sha256": "acad6159854f4e6d9e1113ec20353fb2771c161eab0563d8d367b5ee2640f62b",
+      "gitBlobSha": "b127300883806b1be549e41839f4a5929a39f66d",
       "binary": false
     },
     {
       "path": "mobile/scripts/serve-web.mjs",
-      "bytes": 1100,
-      "sha256": "31006d68d204508003af0c73ee3feb34204f8faf31fb4f953c91240bedf94a94",
-      "gitBlobSha": "8f517fe76d267a8a73b2539fe6175fbc4158a6df",
+      "bytes": 1084,
+      "sha256": "9acf61bb727388b8f2c4a1ef9f51ae17eed810194655fc49e939190a77491835",
+      "gitBlobSha": "45782ed52e96e7c71b6d612a2ec43a71cadda0c7",
       "binary": false
     },
     {
       "path": "mobile/src/AlertRow.tsx",
-      "bytes": 7853,
-      "sha256": "03197fd757b34fd795ea516ce72972c9db03b655122cc7c4358e1868e432f4f6",
-      "gitBlobSha": "0dd36e55df89901d7a4734080b952ea1b2707195",
+      "bytes": 7763,
+      "sha256": "151752074de8059f10de8e55c5ed7fcef6616a5dce625812bd947522acd47b08",
+      "gitBlobSha": "472553af7b5611240c2a0f389f5f9443e6ebaa9d",
       "binary": false
     },
     {
@@ -774,9 +774,9 @@
     },
     {
       "path": "mobile/src/Icon.tsx",
-      "bytes": 684,
-      "sha256": "0e5420cf0b1fe671a8e894f6df382e12c584fc51715f6e558c961bc5b7c2fea3",
-      "gitBlobSha": "b444125a73f7f4b893c526b0a3ea18965b180cb8",
+      "bytes": 675,
+      "sha256": "e13fdb7acc51a27da9d83162f3591528d0a7b52bb616e8dfc34cffcb0cb0f1e5",
+      "gitBlobSha": "a76bff7dbac176394b7257a11021fce989efea84",
       "binary": false
     },
     {
@@ -809,9 +809,9 @@
     },
     {
       "path": "mobile/src/useMonitoring.ts",
-      "bytes": 4919,
-      "sha256": "c9d2f949e23d21c1a771224d294120cea610872b321f67bf6e355c87226c16f0",
-      "gitBlobSha": "cf421856ce8e7466a4aeb2ddc79ab5654a655e5b",
+      "bytes": 4833,
+      "sha256": "91e6cb9d85f2e7f650e3939a03cf9322cf53cd36af967f805aa0e52c021905e4",
+      "gitBlobSha": "f4bef404ee12384dbcc220ea1b827add68096f6c",
       "binary": false
     },
     {
@@ -830,37 +830,37 @@
     },
     {
       "path": "mobile/tests/sync.test.ts",
-      "bytes": 3793,
-      "sha256": "2fc75879a57caac1119b5c7e78b1cebe0a19081b35b6b5e94fbc7f4fe8624828",
-      "gitBlobSha": "863c2424029d120381c940e17e7e9934db92dfaa",
+      "bytes": 3742,
+      "sha256": "15e37227d6f35b992814a2c7660ba6dba8a44e8fd2b9ea78aa826534ea3cbef9",
+      "gitBlobSha": "513e346deca9a629e4c56c8fb9d3cb156a23ad64",
       "binary": false
     },
     {
       "path": "mobile/tsconfig.json",
-      "bytes": 199,
-      "sha256": "6eebb00983b3493147ae4ba0a11d42a96f253b92344d6d8bb378b30fdb1a44ef",
-      "gitBlobSha": "beed53f363a097cbd52b12bed53ea0b1b96c44cb",
+      "bytes": 185,
+      "sha256": "7bc985d3ef5f6c2ef80ddaf81dc782e817ddb93dc9c44c55b7388ddfe8e84458",
+      "gitBlobSha": "5fd012bffb73a800a489af86e1d5628a07df9034",
       "binary": false
     },
     {
       "path": "PRODUCT.md",
-      "bytes": 1906,
-      "sha256": "c2959003fecd589220730627db6bbc377148b26732f1da04da72262fdc61fcbe",
-      "gitBlobSha": "e4a603c9cc24a2e63b9c5bee60d1ac1fb3765600",
+      "bytes": 1882,
+      "sha256": "98fbe752ef288ce3b6707073243c00b24541d541fabc70d19a3e2a677986d789",
+      "gitBlobSha": "3da296845f27a6bf9d517ff133f61a2d9c8608c2",
       "binary": false
     },
     {
       "path": "README.md",
-      "bytes": 16210,
-      "sha256": "642095079a316c8f477031f1d0b5aa881af5071755f679658cea0838428d0fc0",
-      "gitBlobSha": "c45953c408ada9181ee1499fe03c6bd7aa1dd10e",
+      "bytes": 16040,
+      "sha256": "30c21f6bd8ec032f33cd724228bad00f36bda3e83fb5295255fc7627eb2d1537",
+      "gitBlobSha": "6657f886f3759c0f5ed9c5922cf739b187254ac2",
       "binary": false
     },
     {
       "path": "scripts/Setup-Windows.ps1",
-      "bytes": 1428,
-      "sha256": "dbf8ecc1266997540d07aebf4cddbe82932b34a879041d002414df4ad33c216b",
-      "gitBlobSha": "29ac3fb4c0963651bbaa65c6599ee21f4df77518",
+      "bytes": 1410,
+      "sha256": "7b6765908795c91be6e393392e731d66a06e4a908d923b3e35927a47c74de7dd",
+      "gitBlobSha": "47160fb615b217a57bba76020f56fa4c78270778",
       "binary": false
     },
     {
@@ -884,5 +884,6 @@
       "gitBlobSha": "139053ab647c0711c34065bda86c2141adfc1a59",
       "binary": false
     }
-  ]
+  ],
+  "hashScope": "Committed Git blob bytes, after Git line-ending normalization; the manifest excludes its own hash."
 }
